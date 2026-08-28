@@ -2281,12 +2281,348 @@ const FAMILY_DATA = [
    The spreadsheet (data.js) is the single source of truth. Nothing here
    invents a person, a relationship, a date or any other fact.
    ========================================================================== */
-(function () {
+(async function () {
 "use strict";
+
+/* ================================================================
+   LIVE GOOGLE SHEET DATA
+   The embedded FAMILY_DATA above remains the emergency fallback.
+   ================================================================ */
+
+var SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSls_NeaXarxKKZrTNYJmzyU8PElj7i7SySjMQ1d2Uo42qqIWhqJKqJVZRYr2YNFr_R0c0DWhX68pP0/pub?gid=0&single=true&output=csv";
+
+function parseCSV(text) {
+  var rows = [];
+  var row = [], field = "", quoted = false;
+
+  for (var i = 0; i < text.length; i++) {
+    var ch = text[i];
+
+    if (quoted) {
+      if (ch === '"' && text[i + 1] === '"') {
+        field += '"';
+        i++;
+      } else if (ch === '"') {
+        quoted = false;
+      } else {
+        field += ch;
+      }
+    } else {
+      if (ch === '"') {
+        quoted = true;
+      } else if (ch === ",") {
+        row.push(field);
+        field = "";
+      } else if (ch === "\n") {
+        row.push(field);
+        rows.push(row);
+        row = [];
+        field = "";
+      } else if (ch !== "\r") {
+        field += ch;
+      }
+    }
+  }
+
+  row.push(field);
+  if (row.some(function(v){ return v !== ""; })) rows.push(row);
+
+  return rows;
+}
+
+function slugifyName(name, used) {
+  var base = String(name || "")
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "") || "person";
+
+  var id = base, n = 2;
+  while (used[id]) id = base + "-" + n++;
+  used[id] = true;
+  return id;
+}
+
+function makePeopleFromCSV(csvText) {
+  var table = parseCSV(csvText);
+  if (!table.length) throw new Error("Google Sheet returned no rows");
+
+  var headers = table.shift().map(function(h) {
+    return String(h || "").trim().toLowerCase();
+  });
+
+  function col() {
+    for (var a = 0; a < arguments.length; a++) {
+      var idx = headers.indexOf(arguments[a].toLowerCase());
+      if (idx >= 0) return idx;
+    }
+    return -1;
+  }
+
+  var iName   = col("name");
+  var iGender = col("gender");
+  var iFather = col("father");
+  var iMother = col("mother");
+  var iSpouse = col("spouse");
+  var iOrder  = col("sibiling order", "sibling order");
+
+  if (iName < 0) throw new Error("Sheet is missing the Name column");
+
+  function val(row, idx) {
+    return idx < 0 ? "" : String(row[idx] || "").trim();
+  }
+
+  var explicit = [];
+  table.forEach(function(row) {
+    var name = val(row, iName);
+    if (!name) return;
+
+    var orderText = val(row, iOrder);
+    explicit.push({
+      name: name,
+      gender: val(row, iGender) || null,
+      father: val(row, iFather) || null,
+      mother: val(row, iMother) || null,
+      spouse: val(row, iSpouse) || null,
+      siblingOrder: orderText === "" ? null : Number(orderText),
+      referencedOnly: false,
+      photo: null
+    });
+  });
+
+  var map = Object.create(null);
+  explicit.forEach(function(p) {
+    if (map[p.name]) throw new Error("Duplicate Name in Google Sheet: " + p.name);
+    map[p.name] = p;
+  });
+
+  /* Create minimal nodes for referenced-only parents/spouses. */
+  explicit.slice().forEach(function(p) {
+    [
+      ["father", "Male"],
+      ["mother", "Female"],
+      ["spouse", null]
+    ].forEach(function(spec) {
+      var name = p[spec[0]];
+      if (!name || map[name]) return;
+
+      map[name] = {
+        name: name,
+        gender: spec[1],
+        father: null,
+        mother: null,
+        spouse: spec[0] === "spouse" ? p.name : null,
+        siblingOrder: null,
+        referencedOnly: true,
+        photo: null
+      };
+    });
+  });
+
+  /* Complete reciprocal spouse links where safely implied. */
+  Object.keys(map).forEach(function(name) {
+    var p = map[name];
+    if (!p.spouse || !map[p.spouse]) return;
+    var s = map[p.spouse];
+    if (!s.spouse) s.spouse = p.name;
+  });
+
+  /* Infer referenced-only spouse gender only when partner gender makes it
+     unambiguous within this Male/Female dataset. */
+  Object.keys(map).forEach(function(name) {
+    var p = map[name];
+    if (p.gender || !p.spouse || !map[p.spouse]) return;
+    var partner = map[p.spouse];
+    if (partner.gender === "Male") p.gender = "Female";
+    else if (partner.gender === "Female") p.gender = "Male";
+  });
+
+  var people = Object.keys(map).map(function(k){ return map[k]; });
+
+  /* ----------------------------------------------------------------
+     DERIVE GENERATIONS
+     Main known lineage:
+     Gopalaswamy/Meenakshi = 0
+     Rangasamy/Mangalam    = 1
+     Rajagopalan/Madhuram  = 2
+     their children        = 3
+     ---------------------------------------------------------------- */
+
+  var generation = Object.create(null);
+
+  function generationOf(name, stack) {
+    if (!name || !map[name]) return null;
+    if (generation[name] != null) return generation[name];
+
+    stack = stack || Object.create(null);
+    if (stack[name]) return null;
+    stack[name] = true;
+
+    var p = map[name];
+    var pg = [];
+
+    if (p.father && map[p.father]) {
+      var gf = generationOf(p.father, stack);
+      if (gf != null) pg.push(gf + 1);
+    }
+
+    if (p.mother && map[p.mother]) {
+      var gm = generationOf(p.mother, stack);
+      if (gm != null) pg.push(gm + 1);
+    }
+
+    delete stack[name];
+
+    if (pg.length) {
+      generation[name] = Math.max.apply(null, pg);
+      return generation[name];
+    }
+
+    return null;
+  }
+
+  generation["Gopalaswamy"] = 0;
+  generation["Meenakshi"] = 0;
+
+  /* First propagate blood-descendant generations. */
+  for (var pass = 0; pass < people.length + 5; pass++) {
+    var changed = false;
+
+    people.forEach(function(p) {
+      if (generation[p.name] != null) return;
+
+      var vals = [];
+      if (p.father && generation[p.father] != null)
+        vals.push(generation[p.father] + 1);
+      if (p.mother && generation[p.mother] != null)
+        vals.push(generation[p.mother] + 1);
+
+      if (vals.length) {
+        generation[p.name] = Math.max.apply(null, vals);
+        changed = true;
+      }
+    });
+
+    /* spouses visually occupy their partner's generation */
+    people.forEach(function(p) {
+      if (generation[p.name] != null) return;
+      if (p.spouse && generation[p.spouse] != null) {
+        generation[p.name] = generation[p.spouse];
+        changed = true;
+      }
+    });
+
+    if (!changed) break;
+  }
+
+  /* Any disconnected/reference-only person gets a harmless fallback. */
+  people.forEach(function(p) {
+    if (generation[p.name] == null) generation[p.name] = 0;
+    p.generation = generation[p.name];
+  });
+
+  /* ----------------------------------------------------------------
+     DERIVE THE SEVEN MAIN BRANCHES
+     A blood descendant inherits whichever of Rajagopalan + Madhuram's
+     seven children appears in their ancestry.
+     ---------------------------------------------------------------- */
+
+  var MAIN_BRANCHES = [
+    "Rajam","Savithri","Balambal","Sundaresan",
+    "Jambunathan","Rangarajan","Seetharaman"
+  ];
+
+  var branchMemo = Object.create(null);
+
+  function bloodBranchOf(name, visiting) {
+    if (!name || !map[name]) return "root";
+    if (branchMemo[name]) return branchMemo[name];
+
+    if (MAIN_BRANCHES.indexOf(name) >= 0) {
+      branchMemo[name] = name;
+      return name;
+    }
+
+    if (name === "Rajagopalan" || name === "Madhuram" ||
+        name === "Rangasamy" || name === "Mangalam" ||
+        name === "Gopalaswamy" || name === "Meenakshi" ||
+        name === "Akilandam" || name === "Seetha" || name === "Ponnama") {
+      branchMemo[name] = "root";
+      return "root";
+    }
+
+    visiting = visiting || Object.create(null);
+    if (visiting[name]) return "root";
+    visiting[name] = true;
+
+    var p = map[name];
+    var fb = p.father ? bloodBranchOf(p.father, visiting) : "root";
+    var mb = p.mother ? bloodBranchOf(p.mother, visiting) : "root";
+
+    delete visiting[name];
+
+    var b = fb !== "root" ? fb : mb;
+    branchMemo[name] = b || "root";
+    return branchMemo[name];
+  }
+
+  people.forEach(function(p) {
+    p.bloodBranch = bloodBranchOf(p.name);
+  });
+
+  /* Married-in people inherit their spouse's display branch, while actual
+     blood descendants retain their own bloodBranch. */
+  people.forEach(function(p) {
+    var b = p.bloodBranch;
+
+    if (b === "root" && p.spouse && map[p.spouse]) {
+      var spouseBranch = map[p.spouse].bloodBranch;
+      if (spouseBranch && spouseBranch !== "root") b = spouseBranch;
+    }
+
+    p.branch = b || "root";
+  });
+
+  /* Cross-family spouse cases should KEEP their own blood branch. */
+  people.forEach(function(p) {
+    if (p.bloodBranch && p.bloodBranch !== "root")
+      p.branch = p.bloodBranch;
+  });
+
+  var usedIds = Object.create(null);
+  people.forEach(function(p) {
+    p.id = slugifyName(p.name, usedIds);
+  });
+
+  return people;
+}
+
+var PEOPLE;
+var USING_LIVE_SHEET = false;
+
+try {
+  var response = await fetch(SHEET_CSV_URL, { cache: "no-store" });
+  if (!response.ok) throw new Error("HTTP " + response.status);
+
+  var csv = await response.text();
+  PEOPLE = makePeopleFromCSV(csv);
+  USING_LIVE_SHEET = true;
+
+  console.info(
+    "Family tree: loaded " + PEOPLE.length +
+    " people from the live Google Sheet."
+  );
+} catch (err) {
+  console.warn(
+    "Could not load live Google Sheet. Using embedded fallback data.",
+    err
+  );
+  PEOPLE = FAMILY_DATA;
+}
 
 /* ---------------------------------------------------------------- 1 DATA */
 
-var PEOPLE = FAMILY_DATA;
 var byName = Object.create(null);
 var byId   = Object.create(null);
 PEOPLE.forEach(function (p) { byName[p.name] = p; byId[p.id] = p; });
