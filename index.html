@@ -2602,7 +2602,14 @@ var PEOPLE;
 var USING_LIVE_SHEET = false;
 
 try {
-  var response = await fetch(SHEET_CSV_URL, { cache: "no-store" });
+  var freshSheetURL =
+    SHEET_CSV_URL +
+    (SHEET_CSV_URL.indexOf("?") >= 0 ? "&" : "?") +
+    "cb=" + Date.now();
+
+  var response = await fetch(freshSheetURL, {
+    cache: "no-store"
+  });
   if (!response.ok) throw new Error("HTTP " + response.status);
 
   var csv = await response.text();
