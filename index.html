@@ -1,0 +1,3049 @@
+<title>Rajagopalan &amp; Madhuram</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ==========================================================================
+   Rajagopalan & Madhuram — family genealogy
+   Design language: warm ivory poster · serif names · branch colour as wayfinding
+   ========================================================================== */
+
+:root{
+  /* surface */
+  --paper:#FBF7EF;
+  --paper-2:#F5EFE3;
+  --card:#FFFDF8;
+  --line:#E4DACA;
+  --line-soft:#EFE7D9;
+  --ink:#2C2823;
+  --ink-2:#6C6255;
+  --ink-3:#95897A;
+
+  /* the seven branches */
+  --c-rajam:#C06E7C;
+  --c-savithri:#CE8544;
+  --c-balambal:#B08A2E;
+  --c-sundaresan:#578B64;
+  --c-jambunathan:#39858B;
+  --c-rangarajan:#5A7CAE;
+  --c-seetharaman:#8571B2;
+  --c-root:#8A7355;
+
+  --avatar-m:#5A7CAE;
+  --avatar-f:#C06E7C;
+
+  /* geometry */
+  --card-w:166px;
+  --indent:30px;
+  --gap-row:16px;
+  --gap-col:16px;
+  --drop:48px;
+  --bar-h:56px;
+
+  --serif:"Source Serif 4","Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+  --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  padding:calc(var(--bar-h) + 26px) 0 120px;
+  background:
+    radial-gradient(1200px 620px at 50% -180px, #FFFCF6 0%, rgba(255,252,246,0) 70%),
+    var(--paper);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:15px;
+  line-height:1.45;
+}
+.sprite{position:absolute;width:0;height:0;overflow:hidden}
+
+/* ============================ utility bar ============================ */
+.bar{
+  position:fixed; inset:0 auto auto 0; width:100%; height:var(--bar-h); z-index:60;
+  display:flex; align-items:center; gap:18px; padding:0 18px;
+  background:rgba(251,247,239,.92);
+  backdrop-filter:saturate(180%) blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.bar__id{display:flex;align-items:center;gap:9px;flex:0 0 auto;min-width:0}
+.bar__mark{color:var(--c-root);font-size:15px;opacity:.75}
+.bar__names{font-family:var(--serif);font-size:15.5px;font-weight:600;letter-spacing:.01em;white-space:nowrap}
+.bar__names i{color:var(--ink-3);font-style:normal;font-weight:400;padding:0 1px}
+
+.bar__search{position:relative;flex:1 1 340px;max-width:420px;display:flex;align-items:center}
+.bar__search .ic{position:absolute;left:11px;width:16px;height:16px;color:var(--ink-3);pointer-events:none}
+#q{
+  width:100%;height:34px;padding:0 30px 0 33px;
+  border:1px solid var(--line);border-radius:9px;background:#FFFDF8;
+  font:400 14px/1 var(--sans);color:var(--ink);
+}
+#q::placeholder{color:var(--ink-3)}
+#q:focus{outline:none;border-color:var(--c-root);box-shadow:0 0 0 3px rgba(138,115,85,.13)}
+.qclear{position:absolute;right:7px;width:20px;height:20px;border:0;background:none;color:var(--ink-3);font-size:17px;line-height:1;cursor:pointer;border-radius:5px}
+.qclear:hover{background:var(--paper-2);color:var(--ink)}
+
+.results{
+  position:absolute;top:40px;left:0;right:0;z-index:70;
+  background:#FFFDF8;border:1px solid var(--line);border-radius:11px;
+  box-shadow:0 14px 38px rgba(60,45,25,.14);
+  max-height:min(56vh,420px);overflow:auto;padding:5px;
+}
+.results__empty{padding:12px 11px;color:var(--ink-2);font-size:13.5px}
+.res{
+  display:flex;align-items:center;gap:9px;width:100%;
+  padding:7px 9px;border:0;border-radius:8px;background:none;cursor:pointer;text-align:left;
+}
+.res:hover,.res.is-active{background:var(--paper-2)}
+.res__dot{width:7px;height:7px;border-radius:50%;flex:0 0 auto;background:var(--bc,var(--c-root))}
+.res__nm{font-family:var(--serif);font-size:14.5px;font-weight:600;color:var(--ink)}
+.res__sub{font-size:11.5px;color:var(--ink-2);margin-top:1px}
+.res__meta{flex:1 1 auto;min-width:0}
+.res__br{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--bc,var(--c-root));white-space:nowrap;opacity:.9}
+
+.bar__acts{display:flex;align-items:center;gap:7px;margin-left:auto;flex:0 0 auto}
+.btn{
+  height:31px;padding:0 11px;border:1px solid var(--line);border-radius:8px;
+  background:#FFFDF8;color:var(--ink-2);font:500 12.5px/1 var(--sans);cursor:pointer;
+  transition:background .15s,color .15s,border-color .15s;
+}
+.btn:hover{background:var(--paper-2);color:var(--ink);border-color:#DCCFB8}
+.btn--icon{width:31px;padding:0;font-size:14px}
+.key{display:flex;align-items:center;gap:12px;margin-left:6px;padding-left:14px;border-left:1px solid var(--line);
+  font-size:11.5px;color:var(--ink-2);white-space:nowrap}
+.key span{display:flex;align-items:center;gap:5px}
+.key__av{width:15px;height:15px;color:var(--avatar-m)}
+.key__av--f{color:var(--avatar-f)}
+.key__m{font-style:normal;color:var(--ink-2);font-size:12px}
+
+/* ============================ stage ============================ */
+#stage{
+  position:relative;
+  width:max-content;min-width:100%;
+  margin:0 auto;padding:0 24px;
+}
+#wires{position:absolute;top:0;left:0;overflow:visible;pointer-events:none;z-index:0}
+.root{position:relative;z-index:1;display:flex;justify-content:center}
+
+/* ancestral trail: a quiet column above the main couple */
+.trail{position:absolute;z-index:1;display:flex;flex-direction:column;align-items:center}
+.trail__gap{height:30px}
+.trail__row{display:flex;justify-content:center}
+/* Rangasamy & Mangalam's other children, beside the main couple */
+.aunts{position:absolute;z-index:1;display:flex;align-items:flex-start;gap:12px}
+
+/* ============================ person card ============================ */
+.card{
+  --bc:var(--c-root);
+  position:relative;display:flex;align-items:center;gap:9px;
+  width:var(--card-w);padding:7px 10px 7px 11px;
+  background:var(--card);border:1px solid var(--line);border-radius:9px;
+  box-shadow:0 1px 0 rgba(120,100,70,.05);
+  cursor:pointer;text-align:left;font:inherit;color:inherit;
+  transition:box-shadow .16s,border-color .16s,transform .16s;
+}
+.card::before{
+  content:"";position:absolute;left:0;top:8px;bottom:8px;width:3px;
+  border-radius:3px;background:var(--bc);opacity:.85;
+}
+.card:hover{border-color:#D8CAB1;box-shadow:0 4px 14px rgba(110,90,60,.11)}
+.card:focus-visible{outline:2px solid var(--bc);outline-offset:2px}
+.card__av{flex:0 0 auto;width:27px;height:27px;border-radius:50%;overflow:hidden;display:block}
+.card__av svg{width:100%;height:100%;display:block}
+.card__av img{width:100%;height:100%;object-fit:cover;display:block}
+.av--m{color:var(--avatar-m)}
+.av--f{color:var(--avatar-f)}
+.card__nm{min-width:0;flex:1 1 auto}
+.card__n1{
+  display:block;font-family:var(--serif);font-size:14.5px;font-weight:600;
+  line-height:1.2;letter-spacing:.005em;color:var(--ink);
+  overflow-wrap:break-word;
+}
+.card__n1.is-long{font-size:13.2px}
+.card__n1.is-xlong{font-size:12.4px}
+.card__n2{
+  display:block;font-family:var(--serif);font-size:11.8px;font-style:italic;font-weight:400;
+  line-height:1.25;color:var(--ink-2);margin-top:1px;
+}
+
+/* hero couple — the visual anchor */
+.hero > .node .card{--card-w:216px;padding:11px 14px 11px 15px;border-color:#DDCFB4;background:#FFFEFA;
+  box-shadow:0 3px 16px rgba(120,96,58,.10)}
+.hero > .node .card::before{width:4px;top:10px;bottom:10px}
+.hero > .node .card__av{width:36px;height:36px}
+.hero > .node .card__n1{font-size:19px;font-weight:700;letter-spacing:.004em}
+.hero > .node .card__n2{font-size:13px}
+
+/* ancestral trail cards — deliberately secondary */
+.mini .card{--card-w:146px;padding:5px 8px 5px 9px;background:#FAF6ED;border-color:var(--line-soft)}
+.mini .card__av{width:21px;height:21px;opacity:.85}
+.mini .card__n1{font-size:12.6px;font-weight:600;color:#4A4238}
+.mini .card__n2{font-size:10.6px}
+.mini .card::before{opacity:.5}
+
+/* branch heads — the seven */
+.branch-head > .node .card{background:#FFFEFA;border-color:color-mix(in srgb,var(--bc) 34%,var(--line))}
+.branch-head > .node > .couple{
+  background:color-mix(in srgb,var(--bc) 7%,#FFFDF8);
+  border-color:color-mix(in srgb,var(--bc) 26%,var(--line));
+  box-shadow:0 2px 12px rgba(120,96,58,.07);
+}
+.branch-head > .node .card__n1{font-size:15.6px;font-weight:700}
+
+/* ============================ couple ============================ */
+.couple{
+  position:relative;display:flex;flex-direction:column;align-items:center;
+  padding:6px;border:1px solid transparent;border-radius:13px;background:transparent;
+}
+.couple--pair{
+  background:rgba(255,253,247,.62);
+  border-color:color-mix(in srgb,var(--bc) 18%,var(--line-soft));
+}
+.tie{position:relative;width:100%;height:17px;display:flex;align-items:center;justify-content:center}
+.tie::before{content:"";position:absolute;top:0;bottom:0;width:1.5px;background:#B9AC96}
+.tie i{
+  position:relative;font-style:normal;font-size:11px;line-height:1;color:#7A6E5C;
+  background:var(--card);padding:1px 3px;border-radius:3px;
+}
+.hero > .node .tie{height:22px}
+.hero > .node .tie i{font-size:13px;background:#FFFEFA}
+.mini .tie{height:13px}
+.mini .tie i{font-size:9.5px;background:#FAF6ED}
+
+/* cross-branch couple gets a two-colour frame */
+.couple--cross{
+  border-style:dashed;
+  border-color:color-mix(in srgb,var(--bc) 45%,var(--line));
+  background:linear-gradient(135deg,
+    color-mix(in srgb,var(--bc) 8%,#FFFDF8),
+    color-mix(in srgb,var(--bc2,var(--bc)) 9%,#FFFDF8));
+}
+.couple--cross .tie i{color:var(--bc2,var(--ink-2));background:#FEFCF6}
+
+/* ============================ units & rails ============================ */
+.unit{position:relative;display:flex;flex-direction:column;align-items:center}
+.unit--col{align-items:flex-start}
+.node{display:flex;justify-content:center}
+.unit--col > .node{justify-content:flex-start}
+
+.kids{position:relative}
+.kids--row{
+  display:flex;align-items:flex-start;justify-content:center;
+  gap:var(--gap-row);padding-top:var(--drop);
+}
+.kids--col{
+  display:flex;flex-direction:column;align-items:flex-start;
+  gap:var(--gap-col);padding-top:22px;padding-left:var(--indent);
+}
+.kids[hidden]{display:none}
+
+/* open/close animation */
+.kids.is-opening{animation:unfold .30s cubic-bezier(.22,.7,.3,1)}
+@keyframes unfold{from{opacity:0;transform:translateY(-7px)}to{opacity:1;transform:none}}
+
+/* ============================ expand control ============================ */
+.toggle{
+  --bc:var(--c-root);
+  margin-top:8px;display:inline-flex;align-items:center;gap:6px;
+  padding:3px 10px 3px 8px;border-radius:20px;cursor:pointer;
+  border:1px solid color-mix(in srgb,var(--bc) 30%,var(--line));
+  background:color-mix(in srgb,var(--bc) 7%,#FFFDF8);
+  color:color-mix(in srgb,var(--bc) 72%,var(--ink));
+  font:500 11.6px/1 var(--sans);letter-spacing:.015em;
+  transition:background .15s,border-color .15s;
+}
+.toggle--open{padding:3px 7px;color:var(--ink-3);background:transparent;
+  border-color:var(--line-soft)}
+.toggle--open .toggle__t{display:none}
+.toggle:hover{background:color-mix(in srgb,var(--bc) 15%,#FFFDF8);border-color:color-mix(in srgb,var(--bc) 52%,var(--line))}
+.toggle .chev{
+  width:9px;height:9px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;
+  transform:rotate(45deg) translate(-1px,-1px);transition:transform .22s ease;
+}
+.toggle[aria-expanded="true"] .chev{transform:rotate(-135deg) translate(-1px,-1px)}
+.unit--col > .node-wrap{display:flex;flex-direction:column;align-items:flex-start}
+
+/* collapsed branch preview — next generation, at no width cost */
+.preview{
+  margin-top:7px;width:var(--card-w);text-align:center;cursor:pointer;
+  font-family:var(--serif);font-size:11.7px;line-height:1.45;color:var(--ink-2);
+}
+.unit--col .preview{width:auto;max-width:230px}
+.preview b{display:inline-block;font-weight:400;color:color-mix(in srgb,var(--bc) 62%,var(--ink-2))}
+.preview b i{font-style:italic;opacity:.75;font-size:10.6px}
+.preview .sep{opacity:.4;padding:0 3px}
+.unit--col .preview{text-align:left}
+
+/* ============================ cross-branch reference ============================ */
+.xref{
+  --bc:var(--c-root);
+  display:flex;align-items:center;gap:8px;width:var(--card-w);
+  padding:7px 10px;border-radius:9px;cursor:pointer;text-align:left;font:inherit;
+  border:1px dashed color-mix(in srgb,var(--bc) 48%,var(--line));
+  background:repeating-linear-gradient(135deg,rgba(255,253,247,.9) 0 6px,rgba(246,240,229,.9) 6px 12px);
+  color:var(--ink);
+}
+.xref:hover{border-color:var(--bc);background:#FFFDF7}
+.xref__m{font-size:12px;color:var(--bc);flex:0 0 auto}
+.xref__n{display:block;font-family:var(--serif);font-size:14px;font-weight:600;line-height:1.2}
+.xref__s{display:block;font-size:10.5px;font-style:italic;color:var(--ink-2);line-height:1.3;margin-top:2px}
+
+/* ============================ highlight on navigate ============================ */
+@keyframes pulse{
+  0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--bc) 55%,transparent);border-color:var(--bc)}
+  60%{box-shadow:0 0 0 9px color-mix(in srgb,var(--bc) 0%,transparent);border-color:var(--bc)}
+  100%{box-shadow:0 0 0 0 transparent}
+}
+.is-found{animation:pulse 1.5s ease-out 2;border-color:var(--bc)!important}
+
+/* ============================ detail drawer ============================ */
+.panel{
+  position:fixed;top:var(--bar-h);right:0;bottom:0;width:322px;z-index:80;
+  background:#FFFDF8;border-left:1px solid var(--line);
+  box-shadow:-16px 0 44px rgba(70,55,30,.10);
+  padding:20px 22px 30px;overflow:auto;
+  animation:slidein .24s cubic-bezier(.2,.7,.3,1);
+}
+@keyframes slidein{from{transform:translateX(20px);opacity:0}to{transform:none;opacity:1}}
+.panel__x{position:absolute;top:12px;right:12px;width:26px;height:26px;border:0;border-radius:7px;
+  background:none;color:var(--ink-3);font-size:19px;line-height:1;cursor:pointer}
+.panel__x:hover{background:var(--paper-2);color:var(--ink)}
+.p-hd{display:flex;align-items:center;gap:12px;padding-right:26px}
+.p-hd__av{width:48px;height:48px;border-radius:50%;overflow:hidden;flex:0 0 auto}
+.p-hd__av svg,.p-hd__av img{width:100%;height:100%;display:block;object-fit:cover}
+.p-nm{font-family:var(--serif);font-size:20px;font-weight:700;line-height:1.15}
+.p-nm em{display:block;font-size:14px;font-weight:400;color:var(--ink-2);margin-top:1px}
+.p-br{display:inline-flex;align-items:center;gap:6px;margin-top:14px;padding:3px 10px;border-radius:20px;
+  font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;
+  background:color-mix(in srgb,var(--bc) 12%,#FFFDF8);color:color-mix(in srgb,var(--bc) 70%,var(--ink));
+  border:1px solid color-mix(in srgb,var(--bc) 28%,var(--line))}
+.p-sec{margin-top:18px;border-top:1px solid var(--line-soft);padding-top:13px}
+.p-lbl{font-size:10.8px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px}
+.p-row{display:flex;flex-wrap:wrap;gap:6px}
+.p-lnk{
+  display:inline-flex;align-items:center;gap:6px;padding:4px 9px;border-radius:8px;
+  border:1px solid var(--line);background:#FFFDF8;cursor:pointer;
+  font-family:var(--serif);font-size:13.5px;color:var(--ink);
+}
+.p-lnk:hover{background:var(--paper-2)}
+.p-lnk .dot{width:6px;height:6px;border-radius:50%;background:var(--bc,var(--c-root))}
+.p-none{color:var(--ink-3);font-size:13px;font-style:italic}
+.p-note{margin-top:16px;font-size:11.6px;line-height:1.5;color:var(--ink-3);font-style:italic}
+.scrim{position:fixed;inset:0;z-index:70;background:transparent}
+
+/* ============================ mobile ============================ */
+@media (max-width:820px){
+  :root{--card-w:150px;--gap-row:18px;--indent:24px;--drop:38px;--bar-h:auto}
+  body{padding-top:98px}
+  /* narrow screens: every sibling group becomes an indented vertical register,
+     so the genealogy stays readable and the page grows downward instead of sideways */
+  .kids--row{flex-direction:column;align-items:flex-start;justify-content:flex-start;
+    gap:14px;padding-top:20px;padding-left:var(--indent)}
+  .unit{align-items:flex-start}
+  .node{justify-content:flex-start}
+  .preview{text-align:left}
+  .aunts{flex-direction:column;gap:8px}
+  .mini .card{--card-w:120px}
+  .bar{height:auto;flex-wrap:wrap;gap:9px 12px;padding:9px 12px}
+  .bar__search{order:3;flex:1 1 100%;max-width:none}
+  .bar__acts{gap:6px}
+  .key{display:none}
+  .hero > .node .card{--card-w:172px}
+  #stage{padding:0 14px}
+  .panel{top:0;width:min(92vw,340px);z-index:90}
+  .scrim{background:rgba(40,32,20,.28)}
+}
+@media (max-width:460px){
+  .bar__names{display:none}
+  .btn{padding:0 8px;font-size:12px}
+}
+
+/* ============================ print ============================ */
+@media print{
+  body{padding:0;background:#fff}
+  .bar,.panel,.scrim,.toggle,.results{display:none!important}
+  #stage{padding:8mm}
+  .card{box-shadow:none}
+  @page{size:landscape;margin:8mm}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.001ms!important;transition-duration:.001ms!important}
+}
+
+</style>
+<!-- ============ avatar sprite (male / female placeholders) ============ -->
+<svg class="sprite" aria-hidden="true" focusable="false">
+  <symbol id="av-male" viewBox="0 0 40 40">
+    <circle cx="20" cy="20" r="20" fill="currentColor" opacity=".13"/>
+    <circle cx="20" cy="15.4" r="6.2" fill="currentColor" opacity=".78"/>
+    <path d="M7.6 34.2c1.1-6.3 6.3-9.6 12.4-9.6s11.3 3.3 12.4 9.6a20 20 0 0 1-24.8 0Z" fill="currentColor" opacity=".78"/>
+  </symbol>
+  <symbol id="av-female" viewBox="0 0 40 40">
+    <circle cx="20" cy="20" r="20" fill="currentColor" opacity=".13"/>
+    <path d="M20 7.4c4.3 0 7 3 7 7.2 0 1.6-.3 3-1 4.2 1 .3 1.6.9 1.6 1.5 0 .8-1 1.3-2.4 1.5a6 6 0 0 1-10.4 0c-1.5-.2-2.4-.7-2.4-1.5 0-.6.6-1.2 1.6-1.5-.7-1.2-1-2.6-1-4.2 0-4.2 2.7-7.2 7-7.2Z" fill="currentColor" opacity=".78"/>
+    <path d="M8.5 34.9C9.9 28.9 14.6 25.8 20 25.8s10.1 3.1 11.5 9.1a20 20 0 0 1-23 0Z" fill="currentColor" opacity=".78"/>
+  </symbol>
+</svg>
+
+<!-- ============ utility bar ============ -->
+<header class="bar" id="bar">
+  <div class="bar__id">
+    <span class="bar__mark" aria-hidden="true">&#9906;</span>
+    <span class="bar__names">Rajagopalan <i>&amp;</i> Madhuram</span>
+  </div>
+
+  <div class="bar__search" role="search">
+    <svg class="ic" viewBox="0 0 20 20" aria-hidden="true"><circle cx="9" cy="9" r="6" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M13.5 13.5 17 17" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    <input id="q" type="text" placeholder="Find anyone…" autocomplete="off" spellcheck="false" aria-label="Search family members">
+    <button id="qclear" class="qclear" type="button" aria-label="Clear search" hidden>&times;</button>
+    <div id="results" class="results" role="listbox" hidden></div>
+  </div>
+
+  <div class="bar__acts">
+    <button class="btn" id="expandAll" type="button">Expand all</button>
+    <button class="btn" id="collapseAll" type="button">Collapse all</button>
+    <button class="btn btn--icon" id="toTop" type="button" title="Back to top" aria-label="Back to top">&uarr;</button>
+    <button class="btn btn--icon" id="printBtn" type="button" title="Print / Save PDF" aria-label="Print">&#9113;</button>
+    <div class="key" aria-label="Legend">
+      <span><svg class="key__av" viewBox="0 0 40 40"><use href="#av-male"/></svg>Male</span>
+      <span><svg class="key__av key__av--f" viewBox="0 0 40 40"><use href="#av-female"/></svg>Female</span>
+      <span><i class="key__m">&#9906;</i>Marriage</span>
+    </div>
+  </div>
+</header>
+
+<!-- ============ the tree ============ -->
+<main id="stage">
+  <svg id="wires" aria-hidden="true"></svg>
+  <div id="trail" class="trail"></div>
+  <div id="aunts" class="aunts"></div>
+  <div id="root" class="root"></div>
+</main>
+
+<!-- ============ person detail drawer ============ -->
+<aside id="panel" class="panel" hidden aria-label="Person details">
+  <button id="panelClose" class="panel__x" type="button" aria-label="Close">&times;</button>
+  <div id="panelBody"></div>
+</aside>
+<div id="scrim" class="scrim" hidden></div>
+
+<script>
+/* Generated from 'Madhuram FT.xlsx'. Excel is the source of truth.
+   81 spreadsheet rows + 50 referenced-only spouses/parents = 131 people.
+   Add a photo later:  photo: "photos/adithya.jpg"  */
+
+const FAMILY_DATA = [
+ {
+  "id": "anandhajith",
+  "name": "Anandhajith",
+  "gender": "Male",
+  "father": "Arun",
+  "mother": "Ramya (Arun)",
+  "spouse": null,
+  "siblingOrder": 1,
+  "branch": "Jambunathan",
+  "bloodBranch": "Jambunathan",
+  "generation": 6,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "jayanthi",
+  "name": "Jayanthi",
+  "gender": "Female",
+  "father": "Balasubramanian",
+  "mother": "Chandra",
+  "spouse": "Venkatramanan",
+  "siblingOrder": 1,
+  "branch": "Savithri",
+  "bloodBranch": "Savithri",
+  "generation": 5,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "sridhar",
+  "name": "Sridhar",
+  "gender": "Male",
+  "father": "Balasubramanian",
+  "mother": "Chandra",
+  "spouse": "Rajeshwari",
+  "siblingOrder": 2,
+  "branch": "Savithri",
+  "bloodBranch": "Savithri",
+  "generation": 5,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "ramakrishnan",
+  "name": "Ramakrishnan",
+  "gender": "Male",
+  "father": "Balasubramanian (Babu)",
+  "mother": "Malathi",
+  "spouse": null,
+  "siblingOrder": 1,
+  "branch": "Seetharaman",
+  "bloodBranch": "Seetharaman",
+  "generation": 5,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "narendran",
+  "name": "Narendran",
+  "gender": "Male",
+  "father": "Balasubramanian (Babu)",
+  "mother": "Malathi",
+  "spouse": null,
+  "siblingOrder": 2,
+  "branch": "Seetharaman",
+  "bloodBranch": "Seetharaman",
+  "generation": 5,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "litikha",
+  "name": "Litikha",
+  "gender": "Female",
+  "father": "Dhamodharan",
+  "mother": "Krishika",
+  "spouse": null,
+  "siblingOrder": 1,
+  "branch": "Savithri",
+  "bloodBranch": "Savithri",
+  "generation": 6,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "edho-shah",
+  "name": "Edho Shah",
+  "gender": "Female",
+  "father": "Gayathri Husband",
+  "mother": "Gayathri",
+  "spouse": null,
+  "siblingOrder": 1,
+  "branch": "Jambunathan",
+  "bloodBranch": "Jambunathan",
+  "generation": 6,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "nikhil",
+  "name": "Nikhil",
+  "gender": "Male",
+  "father": "Gopal",
+  "mother": "Viji",
+  "spouse": "Nikhil Wife",
+  "siblingOrder": 1,
+  "branch": "Jambunathan",
+  "bloodBranch": "Jambunathan",
+  "generation": 5,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "rangasamy",
+  "name": "Rangasamy",
+  "gender": "Male",
+  "father": "Gopalaswamy",
+  "mother": "Meenakshi",
+  "spouse": "Mangalam",
+  "siblingOrder": 1,
+  "branch": "root",
+  "bloodBranch": null,
+  "generation": 1,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "latha",
+  "name": "Latha",
+  "gender": "Female",
+  "father": "Jambunathan",
+  "mother": "Saroja",
+  "spouse": "Venkatraman",
+  "siblingOrder": 1,
+  "branch": "Jambunathan",
+  "bloodBranch": "Jambunathan",
+  "generation": 4,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "radha",
+  "name": "Radha",
+  "gender": "Female",
+  "father": "Jambunathan",
+  "mother": "Saroja",
+  "spouse": "Mani",
+  "siblingOrder": 2,
+  "branch": "Jambunathan",
+  "bloodBranch": "Jambunathan",
+  "generation": 4,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "ramesh",
+  "name": "Ramesh",
+  "gender": "Male",
+  "father": "Jambunathan",
+  "mother": "Saroja",
+  "spouse": "Lakshmi",
+  "siblingOrder": 3,
+  "branch": "Jambunathan",
+  "bloodBranch": "Jambunathan",
+  "generation": 4,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "bhanu",
+  "name": "Bhanu",
+  "gender": "Female",
+  "father": "Jambunathan",
+  "mother": "Saroja",
+  "spouse": "Subramanian",
+  "siblingOrder": 4,
+  "branch": "Jambunathan",
+  "bloodBranch": "Jambunathan",
+  "generation": 4,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "viji",
+  "name": "Viji",
+  "gender": "Female",
+  "father": "Jambunathan",
+  "mother": "Saroja",
+  "spouse": "Gopal",
+  "siblingOrder": 5,
+  "branch": "Jambunathan",
+  "bloodBranch": "Jambunathan",
+  "generation": 4,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "jayamangalam-kutty",
+  "name": "Jayamangalam (Kutty)",
+  "gender": "Female",
+  "father": "Jambunathan",
+  "mother": "Saroja",
+  "spouse": "Srinivasan (Kumar)",
+  "siblingOrder": 6,
+  "branch": "Jambunathan",
+  "bloodBranch": "Jambunathan",
+  "generation": 4,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "sujatha",
+  "name": "Sujatha",
+  "gender": "Female",
+  "father": "Jayaraman",
+  "mother": "Indra",
+  "spouse": "Subramanian (ChuChu)",
+  "siblingOrder": 1,
+  "branch": "Savithri",
+  "bloodBranch": "Savithri",
+  "generation": 5,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "ramya",
+  "name": "Ramya",
+  "gender": "Female",
+  "father": "Jayaraman",
+  "mother": "Indra",
+  "spouse": "Venkatesh",
+  "siblingOrder": 2,
+  "branch": "Savithri",
+  "bloodBranch": "Savithri",
+  "generation": 5,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "vidya",
+  "name": "Vidya",
+  "gender": "Female",
+  "father": "Jayaraman",
+  "mother": "Indra",
+  "spouse": "Ramasamy",
+  "siblingOrder": 3,
+  "branch": "Savithri",
+  "bloodBranch": "Savithri",
+  "generation": 5,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "padma",
+  "name": "Padma",
+  "gender": "Female",
+  "father": "Kannan",
+  "mother": "Chithra",
+  "spouse": "Padma Husband",
+  "siblingOrder": 1,
+  "branch": "Sundaresan",
+  "bloodBranch": "Sundaresan",
+  "generation": 5,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "venkatesh-balaji",
+  "name": "Venkatesh (Balaji)",
+  "gender": "Male",
+  "father": "Kannan",
+  "mother": "Chithra",
+  "spouse": null,
+  "siblingOrder": 2,
+  "branch": "Sundaresan",
+  "bloodBranch": "Sundaresan",
+  "generation": 5,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "harini",
+  "name": "Harini",
+  "gender": "Female",
+  "father": "Karthik (Kutty)",
+  "mother": "Gayathri (Kutty)",
+  "spouse": null,
+  "siblingOrder": 1,
+  "branch": "Sundaresan",
+  "bloodBranch": "Sundaresan",
+  "generation": 6,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "ananya",
+  "name": "Ananya",
+  "gender": "Female",
+  "father": "Karthikeyan",
+  "mother": "Shridevi",
+  "spouse": null,
+  "siblingOrder": 1,
+  "branch": "Rangarajan",
+  "bloodBranch": "Rangarajan",
+  "generation": 5,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "saravanan",
+  "name": "Saravanan",
+  "gender": "Male",
+  "father": "Krishnan",
+  "mother": "Vasanthi",
+  "spouse": null,
+  "siblingOrder": 1,
+  "branch": "Savithri",
+  "bloodBranch": "Savithri",
+  "generation": 5,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "dhamodharan",
+  "name": "Dhamodharan",
+  "gender": "Male",
+  "father": "Krishnan",
+  "mother": "Vasanthi",
+  "spouse": "Krishika",
+  "siblingOrder": 2,
+  "branch": "Savithri",
+  "bloodBranch": "Savithri",
+  "generation": 5,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "arun",
+  "name": "Arun",
+  "gender": "Male",
+  "father": "Mani",
+  "mother": "Radha",
+  "spouse": "Ramya (Arun)",
+  "siblingOrder": 1,
+  "branch": "Jambunathan",
+  "bloodBranch": "Jambunathan",
+  "generation": 5,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "preethi",
+  "name": "Preethi",
+  "gender": "Female",
+  "father": "Mani",
+  "mother": "Radha",
+  "spouse": "Preethi Husband",
+  "siblingOrder": 2,
+  "branch": "Jambunathan",
+  "bloodBranch": "Jambunathan",
+  "generation": 5,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "indra",
+  "name": "Indra",
+  "gender": "Female",
+  "father": "Pichumani",
+  "mother": "Savithri",
+  "spouse": "Jayaraman",
+  "siblingOrder": 1,
+  "branch": "Savithri",
+  "bloodBranch": "Savithri",
+  "generation": 4,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "chandra",
+  "name": "Chandra",
+  "gender": "Female",
+  "father": "Pichumani",
+  "mother": "Savithri",
+  "spouse": "Balasubramanian",
+  "siblingOrder": 2,
+  "branch": "Savithri",
+  "bloodBranch": "Savithri",
+  "generation": 4,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "sarasa",
+  "name": "Sarasa",
+  "gender": "Female",
+  "father": "Pichumani",
+  "mother": "Savithri",
+  "spouse": "Vishwanathan",
+  "siblingOrder": 3,
+  "branch": "Savithri",
+  "bloodBranch": "Savithri",
+  "generation": 4,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "krishnan",
+  "name": "Krishnan",
+  "gender": "Male",
+  "father": "Pichumani",
+  "mother": "Savithri",
+  "spouse": "Vasanthi",
+  "siblingOrder": 4,
+  "branch": "Savithri",
+  "bloodBranch": "Savithri",
+  "generation": 4,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "diya",
+  "name": "Diya",
+  "gender": "Female",
+  "father": "Preethi Husband",
+  "mother": "Preethi",
+  "spouse": null,
+  "siblingOrder": 1,
+  "branch": "Jambunathan",
+  "bloodBranch": "Jambunathan",
+  "generation": 6,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "vignesh",
+  "name": "Vignesh",
+  "gender": "Male",
+  "father": "Raghavan",
+  "mother": "Akilandeshwari",
+  "spouse": "Shefali",
+  "siblingOrder": 1,
+  "branch": "Rangarajan",
+  "bloodBranch": "Rangarajan",
+  "generation": 5,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "rajam",
+  "name": "Rajam",
+  "gender": "Female",
+  "father": "Rajagopalan",
+  "mother": "Madhuram",
+  "spouse": "Pattabiraman",
+  "siblingOrder": 1,
+  "branch": "Rajam",
+  "bloodBranch": "Rajam",
+  "generation": 3,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "savithri",
+  "name": "Savithri",
+  "gender": "Female",
+  "father": "Rajagopalan",
+  "mother": "Madhuram",
+  "spouse": "Pichumani",
+  "siblingOrder": 2,
+  "branch": "Savithri",
+  "bloodBranch": "Savithri",
+  "generation": 3,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "balambal",
+  "name": "Balambal",
+  "gender": "Female",
+  "father": "Rajagopalan",
+  "mother": "Madhuram",
+  "spouse": "Srinivasan (Balambal)",
+  "siblingOrder": 3,
+  "branch": "Balambal",
+  "bloodBranch": "Balambal",
+  "generation": 3,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "sundaresan",
+  "name": "Sundaresan",
+  "gender": "Male",
+  "father": "Rajagopalan",
+  "mother": "Madhuram",
+  "spouse": "Visalam",
+  "siblingOrder": 4,
+  "branch": "Sundaresan",
+  "bloodBranch": "Sundaresan",
+  "generation": 3,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "jambunathan",
+  "name": "Jambunathan",
+  "gender": "Male",
+  "father": "Rajagopalan",
+  "mother": "Madhuram",
+  "spouse": "Saroja",
+  "siblingOrder": 5,
+  "branch": "Jambunathan",
+  "bloodBranch": "Jambunathan",
+  "generation": 3,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "rangarajan",
+  "name": "Rangarajan",
+  "gender": "Male",
+  "father": "Rajagopalan",
+  "mother": "Madhuram",
+  "spouse": "Bhavani",
+  "siblingOrder": 6,
+  "branch": "Rangarajan",
+  "bloodBranch": "Rangarajan",
+  "generation": 3,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "seetharaman",
+  "name": "Seetharaman",
+  "gender": "Male",
+  "father": "Rajagopalan",
+  "mother": "Madhuram",
+  "spouse": "Janaki",
+  "siblingOrder": 7,
+  "branch": "Seetharaman",
+  "bloodBranch": "Seetharaman",
+  "generation": 3,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "shreya",
+  "name": "Shreya",
+  "gender": "Female",
+  "father": "Rajagopalan (Rajan)",
+  "mother": "Geetha",
+  "spouse": null,
+  "siblingOrder": 1,
+  "branch": "Sundaresan",
+  "bloodBranch": "Sundaresan",
+  "generation": 5,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "karthik-kutty",
+  "name": "Karthik (Kutty)",
+  "gender": "Male",
+  "father": "Ravi",
+  "mother": "Rama",
+  "spouse": "Gayathri (Kutty)",
+  "siblingOrder": 1,
+  "branch": "Sundaresan",
+  "bloodBranch": "Sundaresan",
+  "generation": 5,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "srinivasan",
+  "name": "Srinivasan",
+  "gender": "Male",
+  "father": "Rangarajan",
+  "mother": "Bhavani",
+  "spouse": "Gnanathilagam",
+  "siblingOrder": 1,
+  "branch": "Rangarajan",
+  "bloodBranch": "Rangarajan",
+  "generation": 4,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "akilandeshwari",
+  "name": "Akilandeshwari",
+  "gender": "Female",
+  "father": "Rangarajan",
+  "mother": "Bhavani",
+  "spouse": "Raghavan",
+  "siblingOrder": 2,
+  "branch": "Rangarajan",
+  "bloodBranch": "Rangarajan",
+  "generation": 4,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "karthikeyan",
+  "name": "Karthikeyan",
+  "gender": "Male",
+  "father": "Rangarajan",
+  "mother": "Bhavani",
+  "spouse": "Shridevi",
+  "siblingOrder": 3,
+  "branch": "Rangarajan",
+  "bloodBranch": "Rangarajan",
+  "generation": 4,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "rajagopalan",
+  "name": "Rajagopalan",
+  "gender": "Male",
+  "father": "Rangasamy",
+  "mother": "Mangalam",
+  "spouse": "Madhuram",
+  "siblingOrder": 1,
+  "branch": "root",
+  "bloodBranch": null,
+  "generation": 2,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "akilandam",
+  "name": "Akilandam",
+  "gender": "Female",
+  "father": "Rangasamy",
+  "mother": "Mangalam",
+  "spouse": null,
+  "siblingOrder": 2,
+  "branch": "root",
+  "bloodBranch": null,
+  "generation": 2,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "seetha",
+  "name": "Seetha",
+  "gender": "Female",
+  "father": "Rangasamy",
+  "mother": "Mangalam",
+  "spouse": null,
+  "siblingOrder": 3,
+  "branch": "root",
+  "bloodBranch": null,
+  "generation": 2,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "ponnama",
+  "name": "Ponnama",
+  "gender": "Female",
+  "father": "Rangasamy",
+  "mother": "Mangalam",
+  "spouse": null,
+  "siblingOrder": 4,
+  "branch": "root",
+  "bloodBranch": null,
+  "generation": 2,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "varun",
+  "name": "Varun",
+  "gender": "Male",
+  "father": "Sailesh",
+  "mother": "Anulakshmi",
+  "spouse": null,
+  "siblingOrder": 1,
+  "branch": "Sundaresan",
+  "bloodBranch": "Sundaresan",
+  "generation": 7,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "virun",
+  "name": "Virun",
+  "gender": "Male",
+  "father": "Sailesh",
+  "mother": "Anulakshmi",
+  "spouse": null,
+  "siblingOrder": 2,
+  "branch": "Sundaresan",
+  "bloodBranch": "Sundaresan",
+  "generation": 7,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "sriram",
+  "name": "Sriram",
+  "gender": "Male",
+  "father": "Vishwanathan",
+  "mother": "Sarasa",
+  "spouse": null,
+  "siblingOrder": 1,
+  "branch": "Savithri",
+  "bloodBranch": "Savithri",
+  "generation": 5,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "ajay",
+  "name": "Ajay",
+  "gender": "Male",
+  "father": "Vishwanathan",
+  "mother": "Sarasa",
+  "spouse": null,
+  "siblingOrder": 2,
+  "branch": "Savithri",
+  "bloodBranch": "Savithri",
+  "generation": 5,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "balasubramanian-babu",
+  "name": "Balasubramanian (Babu)",
+  "gender": "Male",
+  "father": "Seetharaman",
+  "mother": "Janaki",
+  "spouse": "Malathi",
+  "siblingOrder": 1,
+  "branch": "Seetharaman",
+  "bloodBranch": "Seetharaman",
+  "generation": 4,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "vedh",
+  "name": "Vedh",
+  "gender": "Male",
+  "father": "Shriya Husband",
+  "mother": "Shriya",
+  "spouse": null,
+  "siblingOrder": 1,
+  "branch": "Jambunathan",
+  "bloodBranch": "Jambunathan",
+  "generation": 6,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "adithya",
+  "name": "Adithya",
+  "gender": "Male",
+  "father": "Srinivasan",
+  "mother": "Gnanathilagam",
+  "spouse": null,
+  "siblingOrder": 1,
+  "branch": "Rangarajan",
+  "bloodBranch": "Rangarajan",
+  "generation": 5,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "divya",
+  "name": "Divya",
+  "gender": "Female",
+  "father": "Srinivasan (Kumar)",
+  "mother": "Jayamangalam (Kutty)",
+  "spouse": "Divya Husband",
+  "siblingOrder": 1,
+  "branch": "Jambunathan",
+  "bloodBranch": "Jambunathan",
+  "generation": 5,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "shriya",
+  "name": "Shriya",
+  "gender": "Female",
+  "father": "Subramanian",
+  "mother": "Bhanu",
+  "spouse": "Shriya Husband",
+  "siblingOrder": 1,
+  "branch": "Jambunathan",
+  "bloodBranch": "Jambunathan",
+  "generation": 5,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "sailesh",
+  "name": "Sailesh",
+  "gender": "Male",
+  "father": "Subramanian (ChuChu)",
+  "mother": "Sujatha",
+  "spouse": "Anulakshmi",
+  "siblingOrder": 1,
+  "branch": "Sundaresan",
+  "bloodBranch": "Sundaresan",
+  "generation": 6,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "jayashree",
+  "name": "Jayashree",
+  "gender": "Female",
+  "father": "Sundaresan",
+  "mother": "Visalam",
+  "spouse": "Venkatraman (Raman)",
+  "siblingOrder": 1,
+  "branch": "Sundaresan",
+  "bloodBranch": "Sundaresan",
+  "generation": 4,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "vijayakumar-ambi",
+  "name": "Vijayakumar (Ambi)",
+  "gender": "Male",
+  "father": "Sundaresan",
+  "mother": "Visalam",
+  "spouse": "Rajeshwari (Raji)",
+  "siblingOrder": 2,
+  "branch": "Sundaresan",
+  "bloodBranch": "Sundaresan",
+  "generation": 4,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "rama",
+  "name": "Rama",
+  "gender": "Female",
+  "father": "Sundaresan",
+  "mother": "Visalam",
+  "spouse": "Ravi",
+  "siblingOrder": 3,
+  "branch": "Sundaresan",
+  "bloodBranch": "Sundaresan",
+  "generation": 4,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "chithra",
+  "name": "Chithra",
+  "gender": "Female",
+  "father": "Sundaresan",
+  "mother": "Visalam",
+  "spouse": "Kannan",
+  "siblingOrder": 4,
+  "branch": "Sundaresan",
+  "bloodBranch": "Sundaresan",
+  "generation": 4,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "subramanian-chuchu",
+  "name": "Subramanian (ChuChu)",
+  "gender": "Male",
+  "father": "Sundaresan",
+  "mother": "Visalam",
+  "spouse": "Sujatha",
+  "siblingOrder": 5,
+  "branch": "Sundaresan",
+  "bloodBranch": "Sundaresan",
+  "generation": 4,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "rajagopalan-rajan",
+  "name": "Rajagopalan (Rajan)",
+  "gender": "Male",
+  "father": "Sundaresan",
+  "mother": "Visalam",
+  "spouse": "Geetha",
+  "siblingOrder": 6,
+  "branch": "Sundaresan",
+  "bloodBranch": "Sundaresan",
+  "generation": 4,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "gayathri",
+  "name": "Gayathri",
+  "gender": "Female",
+  "father": "Venkatraman",
+  "mother": "Latha",
+  "spouse": "Gayathri Husband",
+  "siblingOrder": 1,
+  "branch": "Jambunathan",
+  "bloodBranch": "Jambunathan",
+  "generation": 5,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "krishnamoorthy-kishni",
+  "name": "Krishnamoorthy (Kishni)",
+  "gender": "Male",
+  "father": "Venkatraman (Raman)",
+  "mother": "Jayashree",
+  "spouse": "Pooja",
+  "siblingOrder": 1,
+  "branch": "Sundaresan",
+  "bloodBranch": "Sundaresan",
+  "generation": 5,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "aarthi-gudiya",
+  "name": "Aarthi (Gudiya)",
+  "gender": "Female",
+  "father": "Venkatraman (Raman)",
+  "mother": "Jayashree",
+  "spouse": "Aashish",
+  "siblingOrder": 2,
+  "branch": "Sundaresan",
+  "bloodBranch": "Sundaresan",
+  "generation": 5,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "kalki",
+  "name": "Kalki",
+  "gender": "Female",
+  "father": "Vignesh",
+  "mother": "Shefali",
+  "spouse": null,
+  "siblingOrder": 1,
+  "branch": "Rangarajan",
+  "bloodBranch": "Rangarajan",
+  "generation": 6,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "kahani",
+  "name": "Kahani",
+  "gender": "Female",
+  "father": "Vignesh",
+  "mother": "Shefali",
+  "spouse": null,
+  "siblingOrder": 2,
+  "branch": "Rangarajan",
+  "bloodBranch": "Rangarajan",
+  "generation": 6,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "shobhana",
+  "name": "Shobhana",
+  "gender": "Female",
+  "father": "Vijayakumar (Ambi)",
+  "mother": "Rajeshwari (Raji)",
+  "spouse": "Narayanan",
+  "siblingOrder": 1,
+  "branch": "Sundaresan",
+  "bloodBranch": "Sundaresan",
+  "generation": 5,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "ashwath",
+  "name": "Ashwath",
+  "gender": "Male",
+  "father": "Venkatramanan",
+  "mother": "Jayanthi",
+  "spouse": null,
+  "siblingOrder": 1,
+  "branch": "Savithri",
+  "bloodBranch": "Savithri",
+  "generation": 6,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "aditya",
+  "name": "Aditya",
+  "gender": "Male",
+  "father": "Sridhar",
+  "mother": "Rajeshwari",
+  "spouse": null,
+  "siblingOrder": 1,
+  "branch": "Savithri",
+  "bloodBranch": "Savithri",
+  "generation": 6,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "sridhar-daughter",
+  "name": "Sridhar Daughter",
+  "gender": "Female",
+  "father": "Sridhar",
+  "mother": "Rajeshwari",
+  "spouse": null,
+  "siblingOrder": 2,
+  "branch": "Savithri",
+  "bloodBranch": "Savithri",
+  "generation": 6,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "priyanka",
+  "name": "Priyanka",
+  "gender": "Female",
+  "father": "Venkatesh",
+  "mother": "Ramya",
+  "spouse": "Niranjan",
+  "siblingOrder": 1,
+  "branch": "Savithri",
+  "bloodBranch": "Savithri",
+  "generation": 6,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "malavika",
+  "name": "Malavika",
+  "gender": "Female",
+  "father": "Venkatesh",
+  "mother": "Ramya",
+  "spouse": null,
+  "siblingOrder": 2,
+  "branch": "Savithri",
+  "bloodBranch": "Savithri",
+  "generation": 6,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "ashwin",
+  "name": "Ashwin",
+  "gender": "Male",
+  "father": "Ramasamy",
+  "mother": "Vidya",
+  "spouse": null,
+  "siblingOrder": 1,
+  "branch": "Savithri",
+  "bloodBranch": "Savithri",
+  "generation": 6,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "yuvashree",
+  "name": "Yuvashree",
+  "gender": "Female",
+  "father": "Ramasamy",
+  "mother": "Vidya",
+  "spouse": "Nikhil (Yuvashree)",
+  "siblingOrder": 2,
+  "branch": "Savithri",
+  "bloodBranch": "Savithri",
+  "generation": 6,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "hasini",
+  "name": "Hasini",
+  "gender": "Female",
+  "father": "Narayanan",
+  "mother": "Shobhana",
+  "spouse": null,
+  "siblingOrder": 1,
+  "branch": "Sundaresan",
+  "bloodBranch": "Sundaresan",
+  "generation": 6,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "mithran",
+  "name": "Mithran",
+  "gender": "Male",
+  "father": "Narayanan",
+  "mother": "Shobhana",
+  "spouse": null,
+  "siblingOrder": 2,
+  "branch": "Sundaresan",
+  "bloodBranch": "Sundaresan",
+  "generation": 6,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "padma-son",
+  "name": "Padma Son",
+  "gender": "Male",
+  "father": "Padma Husband",
+  "mother": "Padma",
+  "spouse": null,
+  "siblingOrder": 1,
+  "branch": "Sundaresan",
+  "bloodBranch": "Sundaresan",
+  "generation": 6,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "padma-daughter",
+  "name": "Padma Daughter",
+  "gender": "Female",
+  "father": "Padma Husband",
+  "mother": "Padma",
+  "spouse": null,
+  "siblingOrder": 2,
+  "branch": "Sundaresan",
+  "bloodBranch": "Sundaresan",
+  "generation": 6,
+  "referencedOnly": false,
+  "photo": null
+ },
+ {
+  "id": "balasubramanian",
+  "name": "Balasubramanian",
+  "gender": "Male",
+  "father": null,
+  "mother": null,
+  "spouse": "Chandra",
+  "siblingOrder": null,
+  "branch": "Savithri",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "gayathri-husband",
+  "name": "Gayathri Husband",
+  "gender": "Male",
+  "father": null,
+  "mother": null,
+  "spouse": "Gayathri",
+  "siblingOrder": null,
+  "branch": "Jambunathan",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "gopal",
+  "name": "Gopal",
+  "gender": "Male",
+  "father": null,
+  "mother": null,
+  "spouse": "Viji",
+  "siblingOrder": null,
+  "branch": "Jambunathan",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "gopalaswamy",
+  "name": "Gopalaswamy",
+  "gender": "Male",
+  "father": null,
+  "mother": null,
+  "spouse": "Meenakshi",
+  "siblingOrder": null,
+  "branch": "root",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "jayaraman",
+  "name": "Jayaraman",
+  "gender": "Male",
+  "father": null,
+  "mother": null,
+  "spouse": "Indra",
+  "siblingOrder": null,
+  "branch": "Savithri",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "kannan",
+  "name": "Kannan",
+  "gender": "Male",
+  "father": null,
+  "mother": null,
+  "spouse": "Chithra",
+  "siblingOrder": null,
+  "branch": "Sundaresan",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "mani",
+  "name": "Mani",
+  "gender": "Male",
+  "father": null,
+  "mother": null,
+  "spouse": "Radha",
+  "siblingOrder": null,
+  "branch": "Jambunathan",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "pichumani",
+  "name": "Pichumani",
+  "gender": "Male",
+  "father": null,
+  "mother": null,
+  "spouse": "Savithri",
+  "siblingOrder": null,
+  "branch": "Savithri",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "preethi-husband",
+  "name": "Preethi Husband",
+  "gender": "Male",
+  "father": null,
+  "mother": null,
+  "spouse": "Preethi",
+  "siblingOrder": null,
+  "branch": "Jambunathan",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "raghavan",
+  "name": "Raghavan",
+  "gender": "Male",
+  "father": null,
+  "mother": null,
+  "spouse": "Akilandeshwari",
+  "siblingOrder": null,
+  "branch": "Rangarajan",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "ravi",
+  "name": "Ravi",
+  "gender": "Male",
+  "father": null,
+  "mother": null,
+  "spouse": "Rama",
+  "siblingOrder": null,
+  "branch": "Sundaresan",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "vishwanathan",
+  "name": "Vishwanathan",
+  "gender": "Male",
+  "father": null,
+  "mother": null,
+  "spouse": "Sarasa",
+  "siblingOrder": null,
+  "branch": "Savithri",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "shriya-husband",
+  "name": "Shriya Husband",
+  "gender": "Male",
+  "father": null,
+  "mother": null,
+  "spouse": "Shriya",
+  "siblingOrder": null,
+  "branch": "Jambunathan",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "srinivasan-kumar",
+  "name": "Srinivasan (Kumar)",
+  "gender": "Male",
+  "father": null,
+  "mother": null,
+  "spouse": "Jayamangalam (Kutty)",
+  "siblingOrder": null,
+  "branch": "Jambunathan",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "subramanian",
+  "name": "Subramanian",
+  "gender": "Male",
+  "father": null,
+  "mother": null,
+  "spouse": "Bhanu",
+  "siblingOrder": null,
+  "branch": "Jambunathan",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "venkatraman",
+  "name": "Venkatraman",
+  "gender": "Male",
+  "father": null,
+  "mother": null,
+  "spouse": "Latha",
+  "siblingOrder": null,
+  "branch": "Jambunathan",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "venkatraman-raman",
+  "name": "Venkatraman (Raman)",
+  "gender": "Male",
+  "father": null,
+  "mother": null,
+  "spouse": "Jayashree",
+  "siblingOrder": null,
+  "branch": "Sundaresan",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "venkatramanan",
+  "name": "Venkatramanan",
+  "gender": "Male",
+  "father": null,
+  "mother": null,
+  "spouse": "Jayanthi",
+  "siblingOrder": null,
+  "branch": "Savithri",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "venkatesh",
+  "name": "Venkatesh",
+  "gender": "Male",
+  "father": null,
+  "mother": null,
+  "spouse": "Ramya",
+  "siblingOrder": null,
+  "branch": "Savithri",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "ramasamy",
+  "name": "Ramasamy",
+  "gender": "Male",
+  "father": null,
+  "mother": null,
+  "spouse": "Vidya",
+  "siblingOrder": null,
+  "branch": "Savithri",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "narayanan",
+  "name": "Narayanan",
+  "gender": "Male",
+  "father": null,
+  "mother": null,
+  "spouse": "Shobhana",
+  "siblingOrder": null,
+  "branch": "Sundaresan",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "padma-husband",
+  "name": "Padma Husband",
+  "gender": "Male",
+  "father": null,
+  "mother": null,
+  "spouse": "Padma",
+  "siblingOrder": null,
+  "branch": "Sundaresan",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "ramya-arun",
+  "name": "Ramya (Arun)",
+  "gender": "Female",
+  "father": null,
+  "mother": null,
+  "spouse": "Arun",
+  "siblingOrder": null,
+  "branch": "Jambunathan",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "malathi",
+  "name": "Malathi",
+  "gender": "Female",
+  "father": null,
+  "mother": null,
+  "spouse": "Balasubramanian (Babu)",
+  "siblingOrder": null,
+  "branch": "Seetharaman",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "krishika",
+  "name": "Krishika",
+  "gender": "Female",
+  "father": null,
+  "mother": null,
+  "spouse": "Dhamodharan",
+  "siblingOrder": null,
+  "branch": "Savithri",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "meenakshi",
+  "name": "Meenakshi",
+  "gender": "Female",
+  "father": null,
+  "mother": null,
+  "spouse": "Gopalaswamy",
+  "siblingOrder": null,
+  "branch": "root",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "saroja",
+  "name": "Saroja",
+  "gender": "Female",
+  "father": null,
+  "mother": null,
+  "spouse": "Jambunathan",
+  "siblingOrder": null,
+  "branch": "Jambunathan",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "gayathri-kutty",
+  "name": "Gayathri (Kutty)",
+  "gender": "Female",
+  "father": null,
+  "mother": null,
+  "spouse": "Karthik (Kutty)",
+  "siblingOrder": null,
+  "branch": "Sundaresan",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "shridevi",
+  "name": "Shridevi",
+  "gender": "Female",
+  "father": null,
+  "mother": null,
+  "spouse": "Karthikeyan",
+  "siblingOrder": null,
+  "branch": "Rangarajan",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "vasanthi",
+  "name": "Vasanthi",
+  "gender": "Female",
+  "father": null,
+  "mother": null,
+  "spouse": "Krishnan",
+  "siblingOrder": null,
+  "branch": "Savithri",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "madhuram",
+  "name": "Madhuram",
+  "gender": "Female",
+  "father": null,
+  "mother": null,
+  "spouse": "Rajagopalan",
+  "siblingOrder": null,
+  "branch": "root",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "geetha",
+  "name": "Geetha",
+  "gender": "Female",
+  "father": null,
+  "mother": null,
+  "spouse": "Rajagopalan (Rajan)",
+  "siblingOrder": null,
+  "branch": "Sundaresan",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "bhavani",
+  "name": "Bhavani",
+  "gender": "Female",
+  "father": null,
+  "mother": null,
+  "spouse": "Rangarajan",
+  "siblingOrder": null,
+  "branch": "Rangarajan",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "mangalam",
+  "name": "Mangalam",
+  "gender": "Female",
+  "father": null,
+  "mother": null,
+  "spouse": "Rangasamy",
+  "siblingOrder": null,
+  "branch": "root",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "anulakshmi",
+  "name": "Anulakshmi",
+  "gender": "Female",
+  "father": null,
+  "mother": null,
+  "spouse": "Sailesh",
+  "siblingOrder": null,
+  "branch": "Sundaresan",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "janaki",
+  "name": "Janaki",
+  "gender": "Female",
+  "father": null,
+  "mother": null,
+  "spouse": "Seetharaman",
+  "siblingOrder": null,
+  "branch": "Seetharaman",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "gnanathilagam",
+  "name": "Gnanathilagam",
+  "gender": "Female",
+  "father": null,
+  "mother": null,
+  "spouse": "Srinivasan",
+  "siblingOrder": null,
+  "branch": "Rangarajan",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "visalam",
+  "name": "Visalam",
+  "gender": "Female",
+  "father": null,
+  "mother": null,
+  "spouse": "Sundaresan",
+  "siblingOrder": null,
+  "branch": "Sundaresan",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "shefali",
+  "name": "Shefali",
+  "gender": "Female",
+  "father": null,
+  "mother": null,
+  "spouse": "Vignesh",
+  "siblingOrder": null,
+  "branch": "Rangarajan",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "rajeshwari-raji",
+  "name": "Rajeshwari (Raji)",
+  "gender": "Female",
+  "father": null,
+  "mother": null,
+  "spouse": "Vijayakumar (Ambi)",
+  "siblingOrder": null,
+  "branch": "Sundaresan",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "rajeshwari",
+  "name": "Rajeshwari",
+  "gender": "Female",
+  "father": null,
+  "mother": null,
+  "spouse": "Sridhar",
+  "siblingOrder": null,
+  "branch": "Savithri",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "nikhil-wife",
+  "name": "Nikhil Wife",
+  "gender": "Female",
+  "father": null,
+  "mother": null,
+  "spouse": "Nikhil",
+  "siblingOrder": null,
+  "branch": "Jambunathan",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "lakshmi",
+  "name": "Lakshmi",
+  "gender": "Female",
+  "father": null,
+  "mother": null,
+  "spouse": "Ramesh",
+  "siblingOrder": null,
+  "branch": "Jambunathan",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "pattabiraman",
+  "name": "Pattabiraman",
+  "gender": "Male",
+  "father": null,
+  "mother": null,
+  "spouse": "Rajam",
+  "siblingOrder": null,
+  "branch": "Rajam",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "srinivasan-balambal",
+  "name": "Srinivasan (Balambal)",
+  "gender": "Male",
+  "father": null,
+  "mother": null,
+  "spouse": "Balambal",
+  "siblingOrder": null,
+  "branch": "Balambal",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "divya-husband",
+  "name": "Divya Husband",
+  "gender": "Male",
+  "father": null,
+  "mother": null,
+  "spouse": "Divya",
+  "siblingOrder": null,
+  "branch": "Jambunathan",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "pooja",
+  "name": "Pooja",
+  "gender": "Female",
+  "father": null,
+  "mother": null,
+  "spouse": "Krishnamoorthy (Kishni)",
+  "siblingOrder": null,
+  "branch": "Sundaresan",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "aashish",
+  "name": "Aashish",
+  "gender": "Male",
+  "father": null,
+  "mother": null,
+  "spouse": "Aarthi (Gudiya)",
+  "siblingOrder": null,
+  "branch": "Sundaresan",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "niranjan",
+  "name": "Niranjan",
+  "gender": "Male",
+  "father": null,
+  "mother": null,
+  "spouse": "Priyanka",
+  "siblingOrder": null,
+  "branch": "Savithri",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ },
+ {
+  "id": "nikhil-yuvashree",
+  "name": "Nikhil (Yuvashree)",
+  "gender": "Male",
+  "father": null,
+  "mother": null,
+  "spouse": "Yuvashree",
+  "siblingOrder": null,
+  "branch": "Savithri",
+  "bloodBranch": null,
+  "generation": 0,
+  "referencedOnly": true,
+  "photo": null
+ }
+];
+
+</script>
+<script>
+/* ==========================================================================
+   Rajagopalan & Madhuram — interactive genealogy
+   Sections:  1 data · 2 validation · 3 relationships · 4 branches
+              5 placement model · 6 rendering · 7 connectors
+              8 expand/collapse · 9 search · 10 person details · 11 print
+   The spreadsheet (data.js) is the single source of truth. Nothing here
+   invents a person, a relationship, a date or any other fact.
+   ========================================================================== */
+(function () {
+"use strict";
+
+/* ---------------------------------------------------------------- 1 DATA */
+
+var PEOPLE = FAMILY_DATA;
+var byName = Object.create(null);
+var byId   = Object.create(null);
+PEOPLE.forEach(function (p) { byName[p.name] = p; byId[p.id] = p; });
+
+var ROOT_COUPLE   = "Rajagopalan";          // main visual anchor
+var BRANCH_ORDER  = ["Rajam","Savithri","Balambal","Sundaresan",
+                     "Jambunathan","Rangarajan","Seetharaman"];
+var BRANCH_COLOR  = {
+  Rajam:"#C06E7C", Savithri:"#CE8544", Balambal:"#B08A2E", Sundaresan:"#578B64",
+  Jambunathan:"#39858B", Rangarajan:"#5A7CAE", Seetharaman:"#8571B2", root:"#8A7355"
+};
+/* Which side of a cross-branch marriage carries the couple + descendants.
+   "father" keeps children under the father's family position (matches the
+   spreadsheet's own Father column). Change to "mother" to flip it.        */
+var CROSS_OWNER_SIDE = "father";
+/* Children are laid out left-to-right (with a sibling rail) down to this
+   generation; deeper families switch to an indented vertical register so the
+   page grows downward instead of thousands of pixels sideways.            */
+var ROW_LAYOUT_MAX_GEN = 3;
+
+var color = function (branch) { return BRANCH_COLOR[branch] || BRANCH_COLOR.root; };
+
+/* ---------------------------------------------------------- 2 VALIDATION */
+/* Runs on load; anything unexpected is reported in the console rather than
+   silently patched over. */
+
+var problems = [];
+PEOPLE.forEach(function (p) {
+  ["father","mother","spouse"].forEach(function (k) {
+    if (p[k] && !byName[p[k]]) problems.push(p.name + ": unknown " + k + " “" + p[k] + "”");
+  });
+  if (p.spouse) {
+    var back = byName[p.spouse].spouse;
+    if (back && back !== p.name) problems.push("spouse conflict: " + p.name + " ↔ " + p.spouse);
+  }
+  if (p.father && p.mother) {
+    if (byName[p.father].gender !== "Male")   problems.push(p.name + ": father is not male");
+    if (byName[p.mother].gender !== "Female") problems.push(p.name + ": mother is not female");
+    if (byName[p.father].spouse !== p.mother) problems.push(p.name + ": parents are not recorded as a couple");
+  } else if (p.father || p.mother) {
+    problems.push(p.name + ": only one parent recorded");
+  }
+});
+if (problems.length) console.warn("Family data warnings:", problems);
+
+/* ------------------------------------------------------- 3 RELATIONSHIPS */
+
+var kidsOf = Object.create(null);          // parent name -> [child names]
+PEOPLE.forEach(function (p) {
+  [p.father, p.mother].forEach(function (par) {
+    if (!par) return;
+    (kidsOf[par] || (kidsOf[par] = [])).push(p.name);
+  });
+});
+Object.keys(kidsOf).forEach(function (k) {
+  kidsOf[k].sort(function (a, b) {
+    var x = byName[a].siblingOrder, y = byName[b].siblingOrder;
+    if (x == null) x = 999; if (y == null) y = 999;
+    return x - y || a.localeCompare(b);
+  });
+});
+
+/* Cross-branch marriages: both partners are blood descendants recorded in the
+   sheet, so each already occupies a place in their own parents' family. */
+var xrefTo = Object.create(null);          // non-owner name -> owner name
+var crossPairs = [];
+PEOPLE.forEach(function (p) {
+  var s = p.spouse && byName[p.spouse];
+  if (!s || !p.father || !s.father) return;
+  if (p.name > s.name) return;                       // handle each pair once
+  var owner = CROSS_OWNER_SIDE === "mother"
+      ? (p.gender === "Female" ? p : s)
+      : (p.gender === "Male" ? p : s);
+  var other = owner === p ? s : p;
+  xrefTo[other.name] = owner.name;
+  crossPairs.push({ owner: owner, other: other });
+});
+
+/* ----------------------------------------------------------- 4 BRANCHES */
+/* branch / bloodBranch / generation are precomputed in data.js from the
+   spreadsheet; nothing to derive here. */
+
+function branchLabel(b) { return b === "root" ? "Ancestral line" : b + " branch"; }
+
+/* ---------------------------------------------------- 5 PLACEMENT MODEL */
+
+function buildUnit(name, parentMode) {
+  var p = byName[name];
+  if (xrefTo[name]) {
+    return { kind: "xref", key: p.id, person: p, target: byName[xrefTo[name]], parentMode: parentMode };
+  }
+  var spouse = p.spouse ? byName[p.spouse] : null;
+  var mode = p.generation <= ROW_LAYOUT_MAX_GEN ? "row" : "col";
+  var children = (kidsOf[name] || []).map(function (c) { return buildUnit(c, mode); });
+  return {
+    kind: "unit", key: p.id, person: p, spouse: spouse,
+    mode: mode, parentMode: parentMode, children: children
+  };
+}
+
+var tree = buildUnit(ROOT_COUPLE, "row");
+
+/* where each person's real card lives, and how units nest */
+var unitOfPerson = Object.create(null);
+var parentOfUnit = Object.create(null);
+var unitByKey    = Object.create(null);
+(function index(u, parentKey) {
+  if (u.kind === "xref") return;
+  unitByKey[u.key] = u;
+  parentOfUnit[u.key] = parentKey;
+  unitOfPerson[u.person.id] = u.key;
+  if (u.spouse) unitOfPerson[u.spouse.id] = u.key;
+  u.children.forEach(function (c) { index(c, u.key); });
+})(tree, null);
+
+/* the compact ancestral trail above the main tree */
+var ancestors = (function () {
+  var r = byName[ROOT_COUPLE];
+  var gen1 = r.father ? byName[r.father] : null;                 // Rangasamy
+  var gen0 = gen1 && gen1.father ? byName[gen1.father] : null;    // Gopalaswamy
+  var sibs = gen1 ? (kidsOf[gen1.name] || []).filter(function (n) { return n !== r.name; })
+                    .map(function (n) { return byName[n]; }) : [];
+  return { gen0: gen0, gen1: gen1, siblings: sibs };
+})();
+ancestors.siblings.forEach(function (p) { unitOfPerson[p.id] = "__trail__"; });
+if (ancestors.gen0) unitOfPerson[ancestors.gen0.id] = "__trail__";
+if (ancestors.gen1) unitOfPerson[ancestors.gen1.id] = "__trail__";
+[ancestors.gen0, ancestors.gen1].forEach(function (p) {
+  if (p && p.spouse) unitOfPerson[byName[p.spouse].id] = "__trail__";
+});
+
+/* ---------------------------------------------------------- 6 RENDERING */
+
+var stage  = document.getElementById("stage");
+var wires  = document.getElementById("wires");
+var rootEl = document.getElementById("root");
+var trailEl= document.getElementById("trail");
+var auntsEl= document.getElementById("aunts");
+var SVGNS  = "http://www.w3.org/2000/svg";
+
+function el(tag, cls, parent) {
+  var n = document.createElement(tag);
+  if (cls) n.className = cls;
+  if (parent) parent.appendChild(n);
+  return n;
+}
+function splitName(name) {
+  var m = /^(.*?)\s*(\([^)]*\))\s*$/.exec(name);
+  return m ? { main: m[1], qual: m[2] } : { main: name, qual: null };
+}
+
+/* person card — name first, avatar secondary, photo-ready */
+function card(person) {
+  var b = document.createElement("button");
+  b.type = "button";
+  b.className = "card";
+  b.dataset.card = person.id;
+  b.style.setProperty("--bc", color(person.branch));
+  b.setAttribute("aria-label", person.name);
+
+  var av = el("span", "card__av " + (person.gender === "Female" ? "av--f" : "av--m"), b);
+  if (person.photo) {                       // photo: "photos/adithya.jpg"
+    var img = document.createElement("img");
+    img.src = person.photo; img.alt = person.name; img.loading = "lazy";
+    img.onerror = function () { av.innerHTML = avatarSVG(person.gender); };
+    av.appendChild(img);
+  } else {
+    av.innerHTML = avatarSVG(person.gender);
+  }
+  var nm = el("span", "card__nm", b);
+  var parts = splitName(person.name);
+  var n1 = el("span", "card__n1", nm); n1.textContent = parts.main;
+  if (parts.main.length >= 16) n1.classList.add("is-xlong");
+  else if (parts.main.length >= 13) n1.classList.add("is-long");
+  if (parts.qual) { var n2 = el("span", "card__n2", nm); n2.textContent = parts.qual; }
+  return b;
+}
+function avatarSVG(gender) {
+  return '<svg viewBox="0 0 40 40" aria-hidden="true"><use href="#av-' +
+         (gender === "Female" ? "female" : "male") + '"/></svg>';
+}
+
+/* couple block: blood-line person on top, spouse below, joined by a marriage tie */
+function couple(person, spouse, opts) {
+  opts = opts || {};
+  var c = el("div", "couple" + (spouse ? " couple--pair" : ""));
+  c.style.setProperty("--bc", color(opts.branch || person.branch));
+  c.appendChild(card(person));
+  if (spouse) {
+    if (spouse.branch !== person.branch && spouse.bloodBranch && person.bloodBranch) {
+      c.classList.add("couple--cross");
+      c.style.setProperty("--bc2", color(spouse.branch));
+    }
+    var tie = el("div", "tie", c);
+    tie.innerHTML = "<i>⋈</i>";
+    tie.title = person.name + " — " + spouse.name;
+    c.appendChild(card(spouse));
+  }
+  return c;
+}
+
+function renderUnit(u) {
+  if (u.kind === "xref") {
+    var w = el("div", "unit" + (u.parentMode === "col" ? " unit--col" : ""));
+    w.dataset.key = u.key;
+    var node = el("div", "node", w);
+    var x = document.createElement("button");
+    x.type = "button"; x.className = "xref"; x.dataset.goto = u.person.id;
+    x.dataset.card = "xref-" + u.person.id;
+    x.style.setProperty("--bc", color(u.person.branch));
+    x.innerHTML = '<span class="xref__m">⋈</span><span><span class="xref__n"></span>' +
+                  '<span class="xref__s"></span></span>';
+    x.querySelector(".xref__n").textContent = u.person.name;
+    x.querySelector(".xref__s").textContent =
+      "married " + u.target.name + " — card shown in the " + u.target.branch + " branch";
+    node.appendChild(x);
+    return w;
+  }
+
+  var p = u.person;
+  var cls = "unit";
+  if (u.parentMode === "col") cls += " unit--col";
+  if (p.name === ROOT_COUPLE) cls += " hero";
+  if (p.father === ROOT_COUPLE) cls += " branch-head";
+  var box = el("div", cls);
+  box.dataset.key = u.key;
+  box.dataset.branch = p.branch;
+  box.style.setProperty("--bc", color(p.branch));
+
+  el("div", "node", box).appendChild(couple(p, u.spouse, { branch: p.branch }));
+
+  if (u.children.length) {
+    var t = document.createElement("button");
+    t.type = "button"; t.className = "toggle"; t.dataset.toggle = u.key;
+    t.style.setProperty("--bc", color(p.branch));
+    t.innerHTML = '<span class="chev"></span><span class="toggle__t"></span>';
+    t.querySelector(".toggle__t").textContent =
+      u.children.length + (u.children.length === 1 ? " child" : " children");
+    box.appendChild(t);
+
+    if (p.father === ROOT_COUPLE) {                    // next-generation preview
+      var pv = el("div", "preview", box);
+      pv.style.setProperty("--bc", color(p.branch));
+      u.children.forEach(function (c, i) {
+        if (i) { var s = el("span", "sep", pv); s.textContent = "·"; }
+        var b = document.createElement("b");
+        var sp = splitName(c.person.name);
+        b.textContent = sp.main;
+        if (sp.qual) { var q2 = document.createElement("i"); q2.textContent = " " + sp.qual; b.appendChild(q2); }
+        pv.appendChild(b);
+      });
+    }
+
+    var kids = el("div", "kids kids--" + u.mode, box);
+    u.children.forEach(function (c) { kids.appendChild(renderUnit(c)); });
+    box.appendChild(kids);
+  }
+  return box;
+}
+
+/* ---- the ancestral trail (compact, deliberately secondary) ---- */
+function renderTrail() {
+  trailEl.innerHTML = ""; auntsEl.innerHTML = "";
+  var a = ancestors;
+  if (a.gen0) {
+    var g0 = el("div", "mini trail__row", trailEl);
+    g0.appendChild(couple(a.gen0, a.gen0.spouse ? byName[a.gen0.spouse] : null, { branch: "root" }));
+    el("div", "trail__gap", trailEl);
+  }
+  if (a.gen1) {
+    var g1 = el("div", "mini trail__row", trailEl);
+    g1.appendChild(couple(a.gen1, a.gen1.spouse ? byName[a.gen1.spouse] : null, { branch: "root" }));
+  }
+  a.siblings.forEach(function (s) {
+    var w = el("div", "mini aunts__item", auntsEl);
+    w.appendChild(couple(s, s.spouse ? byName[s.spouse] : null, { branch: "root" }));
+  });
+}
+
+rootEl.appendChild(renderUnit(tree));
+renderTrail();
+
+/* ------------------------------------------------- 7 SVG CONNECTORS */
+
+function rectIn(node, origin) {
+  var r = node.getBoundingClientRect();
+  return { l:r.left-origin.left, t:r.top-origin.top, r:r.right-origin.left, b:r.bottom-origin.top,
+           cx:r.left-origin.left+r.width/2, cy:r.top-origin.top+r.height/2, w:r.width, h:r.height };
+}
+function coupleEl(unitEl) {
+  return unitEl.querySelector(":scope > .node > .couple") ||
+         unitEl.querySelector(":scope > .node > .xref");
+}
+function visible(node) { return !!(node && node.offsetParent !== null); }
+
+function path(d, stroke, opts) {
+  opts = opts || {};
+  var pt = document.createElementNS(SVGNS, "path");
+  pt.setAttribute("d", d);
+  pt.setAttribute("fill", "none");
+  pt.setAttribute("stroke", stroke);
+  pt.setAttribute("stroke-width", opts.w || 1.4);
+  pt.setAttribute("stroke-linecap", "square");
+  pt.setAttribute("stroke-linejoin", "miter");
+  if (opts.dash) pt.setAttribute("stroke-dasharray", opts.dash);
+  if (opts.opacity) pt.setAttribute("opacity", opts.opacity);
+  return pt;
+}
+
+function drawWires() {
+  /* the overlay itself must not hold the stage open while we measure it */
+  wires.style.width = "0px"; wires.style.height = "0px";
+  var o = stage.getBoundingClientRect();
+  var W = Math.max(stage.scrollWidth, stage.clientWidth);
+  var H = Math.max(stage.scrollHeight, stage.clientHeight);
+  wires.setAttribute("width", W);
+  wires.setAttribute("height", H);
+  wires.setAttribute("viewBox", "0 0 " + W + " " + H);
+  wires.style.width = W + "px"; wires.style.height = H + "px";
+  while (wires.firstChild) wires.removeChild(wires.firstChild);
+  var defs = document.createElementNS(SVGNS, "defs");
+  wires.appendChild(defs);
+
+  /* --- descent lines, unit by unit --- */
+  Array.prototype.forEach.call(stage.querySelectorAll(".unit"), function (u) {
+    var kids = u.querySelector(":scope > .kids");
+    if (!kids || kids.hidden || !visible(kids)) return;
+    var a = coupleEl(u); if (!a) return;
+    var A = rectIn(a, o);
+    var stroke = color(u.dataset.branch || "root");
+    var childUnits = Array.prototype.filter.call(kids.children, function (n) {
+      return n.classList.contains("unit") && visible(n);
+    });
+    if (!childUnits.length) return;
+    var anchors = childUnits.map(function (c) { return rectIn(coupleEl(c), o); });
+
+    var isRow = getComputedStyle(kids).flexDirection !== "column";
+    if (isRow) {
+      var top = Math.min.apply(null, anchors.map(function (r) { return r.t; }));
+      var railY = Math.round((A.b + top) / 2);
+      var d = "M" + A.cx + " " + A.b + " V" + railY;
+      if (anchors.length > 1) {
+        var x1 = Math.min.apply(null, anchors.map(function (r) { return r.cx; }));
+        var x2 = Math.max.apply(null, anchors.map(function (r) { return r.cx; }));
+        d += " M" + x1 + " " + railY + " H" + x2;
+      }
+      anchors.forEach(function (r) { d += " M" + r.cx + " " + railY + " V" + r.t; });
+      wires.appendChild(path(d, stroke, { opacity: .88 }));
+    } else {
+      var railX = Math.round(A.l + 22);
+      var last = anchors[anchors.length - 1];
+      var lastY = Math.round(last.t + Math.min(24, last.h / 2));
+      var dd = "M" + railX + " " + A.b + " V" + lastY;
+      anchors.forEach(function (r) {
+        var y = Math.round(r.t + Math.min(24, r.h / 2));
+        dd += " M" + railX + " " + y + " H" + r.l;
+      });
+      wires.appendChild(path(dd, stroke, { opacity: .88 }));
+    }
+  });
+
+  /* --- ancestral trail --- */
+  var trailCouples = trailEl.querySelectorAll(".couple");
+  if (trailCouples.length === 2) {
+    var t0 = rectIn(trailCouples[0], o), t1 = rectIn(trailCouples[1], o);
+    wires.appendChild(path("M" + t0.cx + " " + t0.b + " V" + t1.t, BRANCH_COLOR.root, { opacity: .55 }));
+  }
+  var heroCouple = rootEl.querySelector(".hero > .node > .couple");
+  if (trailCouples.length && heroCouple) {
+    var src  = rectIn(trailCouples[trailCouples.length - 1], o);
+    var hero = rectIn(heroCouple, o);
+    var auntEls = Array.prototype.slice.call(auntsEl.querySelectorAll(".couple"));
+    var auntRects = auntEls.map(function (n) { return rectIn(n, o); });
+    var stacked = getComputedStyle(auntsEl).flexDirection === "column";
+    var ry = Math.round((src.b + hero.t) / 2);
+
+    if (!stacked) {
+      var kidRects = [hero].concat(auntRects);
+      var dd2 = "M" + src.cx + " " + src.b + " V" + ry;
+      if (kidRects.length > 1) {
+        dd2 += " M" + Math.min.apply(null, kidRects.map(function (r) { return r.cx; })) + " " + ry +
+               " H" + Math.max.apply(null, kidRects.map(function (r) { return r.cx; }));
+      }
+      kidRects.forEach(function (r) { dd2 += " M" + r.cx + " " + ry + " V" + r.t; });
+      wires.appendChild(path(dd2, BRANCH_COLOR.root, { opacity: .55 }));
+    } else {
+      var spine = auntRects.length ? Math.round(auntRects[0].l - 14) : src.cx;
+      var d3 = "M" + src.cx + " " + src.b + " V" + ry + " M" + src.cx + " " + ry + " V" + hero.t;
+      if (auntRects.length) {
+        var lastA = auntRects[auntRects.length - 1];
+        d3 += " M" + src.cx + " " + ry + " H" + spine +
+              " M" + spine + " " + ry + " V" + Math.round(lastA.t + Math.min(20, lastA.h / 2));
+        auntRects.forEach(function (r) {
+          var y = Math.round(r.t + Math.min(20, r.h / 2));
+          d3 += " M" + spine + " " + y + " H" + r.l;
+        });
+      }
+      wires.appendChild(path(d3, BRANCH_COLOR.root, { opacity: .55 }));
+    }
+  }
+
+  /* --- cross-branch marriage --- */
+  crossPairs.forEach(function (pair, i) {
+    var from = stage.querySelector('[data-goto="' + pair.other.id + '"]');
+    var toU  = stage.querySelector('.unit[data-key="' + pair.owner.id + '"]');
+    if (!from || !toU || !visible(from) || !visible(toU)) return;
+    var to = coupleEl(toU); if (!to || !visible(to)) return;
+    var A = rectIn(from, o), B = rectIn(to, o);
+    var ax = A.cx, ay = A.b;
+    var far = Math.abs(B.cx - ax) > 520;
+    var bx = far ? B.l : B.cx, by = far ? B.cy : B.t;
+    var dip = far ? 150 : 70;
+    var d = far
+      ? "M" + ax + " " + ay + " C" + ax + " " + (ay + dip) + " " +
+        (bx - dip * 1.4) + " " + (by + dip) + " " + bx + " " + by
+      : "M" + ax + " " + ay + " C" + ax + " " + (ay + dip) + " " +
+        bx + " " + (by - dip) + " " + bx + " " + by;
+
+    var gid = "xg" + i;
+    var g = document.createElementNS(SVGNS, "linearGradient");
+    g.setAttribute("id", gid); g.setAttribute("gradientUnits", "userSpaceOnUse");
+    g.setAttribute("x1", ax); g.setAttribute("y1", ay); g.setAttribute("x2", bx); g.setAttribute("y2", by);
+    [[0, color(pair.other.branch)], [1, color(pair.owner.branch)]].forEach(function (s) {
+      var st = document.createElementNS(SVGNS, "stop");
+      st.setAttribute("offset", s[0]); st.setAttribute("stop-color", s[1]);
+      g.appendChild(st);
+    });
+    defs.appendChild(g);
+
+    var pt = path(d, "url(#" + gid + ")", { w: 1.6, dash: "5 5", opacity: far ? .42 : .9 });
+    pt.setAttribute("class", "xlink");
+    wires.appendChild(pt);
+    [from, toU].forEach(function (n) {
+      n.addEventListener("mouseenter", function () { pt.setAttribute("opacity", ".95"); });
+      n.addEventListener("mouseleave", function () { pt.setAttribute("opacity", far ? ".42" : ".9"); });
+    });
+
+    var mid = pt.getPointAtLength(pt.getTotalLength() / 2);
+    var c = document.createElementNS(SVGNS, "circle");
+    c.setAttribute("cx", mid.x); c.setAttribute("cy", mid.y); c.setAttribute("r", 9);
+    c.setAttribute("fill", "#FBF7EF");
+    c.setAttribute("stroke", color(pair.owner.branch));
+    c.setAttribute("stroke-width", 1.2); c.setAttribute("opacity", ".9");
+    wires.appendChild(c);
+    var tx = document.createElementNS(SVGNS, "text");
+    tx.setAttribute("x", mid.x); tx.setAttribute("y", mid.y + 3.6);
+    tx.setAttribute("text-anchor", "middle");
+    tx.setAttribute("font-size", "10"); tx.setAttribute("fill", color(pair.owner.branch));
+    tx.textContent = "⋈";
+    wires.appendChild(tx);
+  });
+}
+
+/* trail + siblings are positioned relative to the hero couple */
+function placeTrail() {
+  var hero = rootEl.querySelector(".hero > .node > .couple");
+  if (!hero) return;
+  auntsEl.style.left = "0px"; auntsEl.style.top = "0px";
+  var o = stage.getBoundingClientRect();
+  var H = rectIn(hero, o);
+
+  trailEl.style.left = "0px"; trailEl.style.top = "0px";
+  var tw = trailEl.offsetWidth, th = trailEl.offsetHeight;
+  trailEl.style.left = Math.round(H.cx - tw / 2) + "px";
+  trailEl.style.top  = Math.round(H.t - 62 - th) + "px";
+
+  auntsEl.style.left = Math.round(H.r + (window.innerWidth <= 820 ? 16 : 54)) + "px";
+  auntsEl.style.top  = Math.round(H.t + 6) + "px";
+
+  var need = th + 78;
+  var current = parseFloat(getComputedStyle(stage).paddingTop) || 0;
+  if (Math.abs(current - need) > 1) {
+    stage.style.paddingTop = need + "px";
+    var H2 = rectIn(hero, stage.getBoundingClientRect());
+    trailEl.style.top = Math.round(H2.t - 62 - th) + "px";
+    auntsEl.style.top = Math.round(H2.t + 6) + "px";
+  }
+}
+
+var relayoutPending = false;
+function relayout() {
+  if (relayoutPending) return;
+  relayoutPending = true;
+  requestAnimationFrame(function () {
+    relayoutPending = false;
+    placeTrail();
+    drawWires();
+  });
+}
+function relayoutFor(ms) {
+  var t0 = performance.now();
+  (function loop() {
+    relayout();
+    if (performance.now() - t0 < ms) requestAnimationFrame(loop);
+  })();
+}
+
+/* --------------------------------------------- 8 EXPAND / COLLAPSE */
+
+function setOpen(key, open) {
+  var u = stage.querySelector('.unit[data-key="' + key + '"]');
+  if (!u) return;
+  var kids = u.querySelector(":scope > .kids");
+  var tog  = u.querySelector(":scope > .toggle");
+  var prev = u.querySelector(":scope > .preview");
+  if (!kids) return;
+  kids.hidden = !open;
+  if (open) { kids.classList.remove("is-opening"); void kids.offsetWidth; kids.classList.add("is-opening"); }
+  if (tog) {
+    tog.setAttribute("aria-expanded", open ? "true" : "false");
+    var n = Array.prototype.filter.call(kids.children, function (c) { return c.classList.contains("unit"); }).length;
+    tog.classList.toggle("toggle--open", open);
+    tog.querySelector(".toggle__t").textContent = open ? "" : n + (n === 1 ? " child" : " children");
+    tog.title = open ? "Collapse this family" : "Show " + n + (n === 1 ? " child" : " children");
+  }
+  if (prev) prev.style.display = open ? "none" : "";
+}
+function isOpen(key) {
+  var u = stage.querySelector('.unit[data-key="' + key + '"]');
+  var k = u && u.querySelector(":scope > .kids");
+  return !!(k && !k.hidden);
+}
+function allKeys() {
+  return Array.prototype.map.call(stage.querySelectorAll(".unit[data-key]"),
+    function (u) { return u.dataset.key; });
+}
+function initialState() {
+  allKeys().forEach(function (k) { setOpen(k, k === tree.key); });
+}
+function expandAll()   { allKeys().forEach(function (k) { setOpen(k, true); }); relayoutFor(420); }
+function collapseAll() { initialState(); relayoutFor(420); window.scrollTo({ top: 0, behavior: "smooth" }); }
+
+stage.addEventListener("click", function (e) {
+  var t = e.target.closest("[data-toggle]");
+  if (t) { setOpen(t.dataset.toggle, !isOpen(t.dataset.toggle)); relayoutFor(420); return; }
+  var pv = e.target.closest(".preview");
+  if (pv) { var k = pv.closest(".unit").dataset.key; setOpen(k, true); relayoutFor(420); return; }
+  var x = e.target.closest("[data-goto]");
+  if (x) { reveal(x.dataset.goto); return; }
+  var c = e.target.closest("[data-card]");
+  if (c && !c.dataset.goto) { openPanel(c.dataset.card); }
+});
+
+/* --------------------------------------------------------- 9 SEARCH */
+
+var q = document.getElementById("q");
+var results = document.getElementById("results");
+var qclear = document.getElementById("qclear");
+var activeIdx = -1, matches = [];
+
+function relationLine(p) {
+  var bits = [];
+  if (p.father && p.mother) bits.push("child of " + p.father + " & " + p.mother);
+  if (p.spouse) bits.push("married to " + p.spouse);
+  var ch = kidsOf[p.name];
+  if (ch && ch.length) bits.push(ch.length + (ch.length === 1 ? " child" : " children"));
+  return bits.join("  ·  ") || "referenced in the family record";
+}
+function search(term) {
+  term = term.trim().toLowerCase();
+  if (!term) return [];
+  var starts = [], contains = [];
+  PEOPLE.forEach(function (p) {
+    var n = p.name.toLowerCase();
+    if (n.indexOf(term) === 0) starts.push(p);
+    else if (n.indexOf(term) > -1) contains.push(p);
+  });
+  return starts.concat(contains).slice(0, 12);
+}
+function renderResults() {
+  results.innerHTML = "";
+  if (!matches.length) {
+    results.hidden = !q.value.trim();
+    if (!results.hidden) {
+      var e = el("div", "results__empty", results);
+      e.textContent = "No one by that name in the family record.";
+    }
+    return;
+  }
+  matches.forEach(function (p, i) {
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "res" + (i === activeIdx ? " is-active" : "");
+    b.style.setProperty("--bc", color(p.branch));
+    b.dataset.pick = p.id;
+    b.innerHTML = '<span class="res__dot"></span><span class="res__meta">' +
+                  '<span class="res__nm"></span><span class="res__sub"></span></span>' +
+                  '<span class="res__br"></span>';
+    b.querySelector(".res__nm").textContent = p.name;
+    b.querySelector(".res__sub").textContent = relationLine(p);
+    b.querySelector(".res__br").textContent = p.branch === "root" ? "Ancestral" : p.branch;
+    results.appendChild(b);
+  });
+  results.hidden = false;
+}
+q.addEventListener("input", function () {
+  matches = search(q.value); activeIdx = matches.length ? 0 : -1;
+  qclear.hidden = !q.value; renderResults();
+});
+q.addEventListener("keydown", function (e) {
+  if (e.key === "ArrowDown") { activeIdx = Math.min(activeIdx + 1, matches.length - 1); renderResults(); e.preventDefault(); }
+  else if (e.key === "ArrowUp") { activeIdx = Math.max(activeIdx - 1, 0); renderResults(); e.preventDefault(); }
+  else if (e.key === "Enter" && matches[activeIdx]) { pick(matches[activeIdx].id); e.preventDefault(); }
+  else if (e.key === "Escape") { results.hidden = true; q.blur(); }
+});
+results.addEventListener("click", function (e) {
+  var b = e.target.closest("[data-pick]");
+  if (b) pick(b.dataset.pick);
+});
+qclear.addEventListener("click", function () {
+  q.value = ""; matches = []; qclear.hidden = true; results.hidden = true; q.focus();
+});
+document.addEventListener("click", function (e) {
+  if (!e.target.closest(".bar__search")) results.hidden = true;
+});
+function pick(id) { results.hidden = true; reveal(id); }
+
+/* expand whatever is needed, scroll there, highlight briefly */
+function reveal(personId) {
+  var p = byId[personId]; if (!p) return;
+  var key = unitOfPerson[personId];
+  if (key && key !== "__trail__") {
+    var chain = [], k = key;
+    while (k) { chain.push(k); k = parentOfUnit[k]; }
+    chain.reverse().forEach(function (kk) { if (kk !== key || unitByKey[kk]) setOpen(kk, true); });
+    chain.forEach(function (kk) { setOpen(kk, true); });
+    setOpen(key, isOpen(key) || true);
+  }
+  relayout();
+  requestAnimationFrame(function () {
+    var target = stage.querySelector('[data-card="' + personId + '"]');
+    if (!target) return;
+    var r = target.getBoundingClientRect();
+    var barH = document.getElementById("bar").offsetHeight;
+    window.scrollTo({
+      top: window.scrollY + r.top - (window.innerHeight / 2) + r.height / 2,
+      left: Math.max(0, window.scrollX + r.left - (window.innerWidth / 2) + r.width / 2),
+      behavior: "smooth"
+    });
+    void barH;
+    document.querySelectorAll(".is-found").forEach(function (n) { n.classList.remove("is-found"); });
+    target.classList.add("is-found");
+    setTimeout(function () { target.classList.remove("is-found"); }, 3200);
+    relayoutFor(600);
+  });
+}
+
+/* ------------------------------------------------- 10 PERSON DETAILS */
+
+var panel = document.getElementById("panel");
+var panelBody = document.getElementById("panelBody");
+var scrim = document.getElementById("scrim");
+
+function personLink(name) {
+  var p = byName[name];
+  var b = document.createElement("button");
+  b.type = "button"; b.className = "p-lnk"; b.dataset.person = p.id;
+  b.style.setProperty("--bc", color(p.branch));
+  b.innerHTML = '<span class="dot"></span>';
+  b.appendChild(document.createTextNode(p.name));
+  return b;
+}
+function section(title, names, emptyText) {
+  var s = el("div", "p-sec");
+  var l = el("div", "p-lbl", s); l.textContent = title;
+  if (!names.length) { var n = el("div", "p-none", s); n.textContent = emptyText; return s; }
+  var row = el("div", "p-row", s);
+  names.forEach(function (nm) { row.appendChild(personLink(nm)); });
+  return s;
+}
+function openPanel(id) {
+  var p = byId[id]; if (!p) return;
+  panelBody.innerHTML = "";
+  var hd = el("div", "p-hd", panelBody);
+  var av = el("div", "p-hd__av", hd);
+  av.style.color = p.gender === "Female" ? "var(--avatar-f)" : "var(--avatar-m)";
+  av.innerHTML = p.photo ? '<img src="' + p.photo + '" alt="">' : avatarSVG(p.gender);
+  var nm = el("div", "p-nm", hd);
+  var parts = splitName(p.name);
+  nm.textContent = parts.main;
+  if (parts.qual) { var em = document.createElement("em"); em.textContent = parts.qual; nm.appendChild(em); }
+
+  var br = el("div", "p-br", panelBody);
+  br.style.setProperty("--bc", color(p.branch));
+  br.textContent = branchLabel(p.branch);
+
+  var g = el("div", "p-sec", panelBody);
+  el("div", "p-lbl", g).textContent = "Gender";
+  var gv = el("div", "p-none", g); gv.style.fontStyle = "normal"; gv.style.color = "var(--ink)";
+  gv.textContent = p.gender;
+
+  panelBody.appendChild(section("Parents",
+    [p.father, p.mother].filter(Boolean), "Not recorded in the spreadsheet"));
+  panelBody.appendChild(section("Spouse", p.spouse ? [p.spouse] : [], "None recorded"));
+  panelBody.appendChild(section("Children", kidsOf[p.name] || [], "None recorded"));
+
+  var note = el("div", "p-note", panelBody);
+  note.textContent = p.referencedOnly
+    ? "Recorded through a relationship only — this person has no row of their own in the spreadsheet, so no ancestry is tracked for them."
+    : "Every detail here comes from the family spreadsheet.";
+
+  panel.hidden = false; scrim.hidden = false;
+}
+function closePanel() { panel.hidden = true; scrim.hidden = true; }
+document.getElementById("panelClose").addEventListener("click", closePanel);
+scrim.addEventListener("click", closePanel);
+document.addEventListener("keydown", function (e) { if (e.key === "Escape") closePanel(); });
+panelBody.addEventListener("click", function (e) {
+  var b = e.target.closest("[data-person]");
+  if (b) { openPanel(b.dataset.person); reveal(b.dataset.person); }
+});
+
+/* ------------------------------------------------------- 11 PRINT */
+
+document.getElementById("printBtn").addEventListener("click", function () {
+  expandAll();
+  setTimeout(function () { window.print(); }, 500);
+});
+document.getElementById("expandAll").addEventListener("click", expandAll);
+document.getElementById("collapseAll").addEventListener("click", collapseAll);
+document.getElementById("toTop").addEventListener("click", function () {
+  window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+});
+
+/* --------------------------------------------------------- start-up */
+
+initialState();
+relayout();
+window.addEventListener("resize", function () { relayout(); });
+window.addEventListener("load", function () {
+  relayoutFor(900);
+  setTimeout(function () {
+    var h = rootEl.querySelector(".hero > .node > .couple");
+    if (!h) return;
+    var r = h.getBoundingClientRect();
+    var want = window.scrollX + r.left + r.width / 2 - window.innerWidth / 2;
+    if (document.documentElement.scrollWidth > window.innerWidth + 4 && want > 4) {
+      window.scrollTo({ left: want, top: 0 });
+    }
+  }, 260);
+});
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { relayout(); });
+
+/* the seven branches must appear in the spreadsheet's sibling order */
+(function () {
+  var shown = Array.prototype.map.call(
+    rootEl.querySelectorAll(".branch-head"),
+    function (u) { return unitByKey[u.dataset.key].person.name; });
+  if (shown.join("|") !== BRANCH_ORDER.join("|"))
+    console.warn("Branch order differs from the expected sibling order:", shown);
+})();
+
+/* handy in the console for checking the data */
+window.FT = {
+  people: PEOPLE, byName: byName, kidsOf: kidsOf, problems: problems,
+  crossPairs: crossPairs, tree: tree, expandAll: expandAll, collapseAll: collapseAll,
+  reveal: reveal, redraw: relayout
+};
+})();
+
+</script>
