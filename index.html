@@ -2598,6 +2598,122 @@ function makePeopleFromCSV(csvText) {
   return people;
 }
 
+/* ================================================================
+   DATA VALIDATION
+   Fresh Sheet data is only used if these checks pass.
+   ================================================================ */
+
+function validatePeople(people) {
+  var errors = [];
+  var byName = Object.create(null);
+
+  people.forEach(function(p) {
+    if (!p.name) {
+      errors.push("A row/person is missing a Name.");
+      return;
+    }
+
+    if (byName[p.name]) {
+      errors.push("Duplicate Name: " + p.name);
+    } else {
+      byName[p.name] = p;
+    }
+
+    if (
+      p.siblingOrder != null &&
+      (!Number.isFinite(Number(p.siblingOrder)) || Number(p.siblingOrder) < 1)
+    ) {
+      errors.push(
+        "Invalid Sibling Order for " + p.name + ": " + p.siblingOrder
+      );
+    }
+  });
+
+  people.forEach(function(p) {
+    [
+      ["father", p.father],
+      ["mother", p.mother],
+      ["spouse", p.spouse]
+    ].forEach(function(ref) {
+      var type = ref[0];
+      var name = ref[1];
+
+      if (!name) return;
+
+      if (name === p.name) {
+        errors.push(
+          p.name + " cannot be their own " + type + "."
+        );
+      }
+
+      if (!byName[name]) {
+        errors.push(
+          p.name + " references missing " + type + ": " + name
+        );
+      }
+    });
+
+    if (p.spouse && byName[p.spouse]) {
+      var spouse = byName[p.spouse];
+
+      if (spouse.spouse && spouse.spouse !== p.name) {
+        errors.push(
+          "Spouse conflict: " +
+          p.name + " → " + p.spouse +
+          ", but " + p.spouse + " → " + spouse.spouse
+        );
+      }
+    }
+  });
+
+  return {
+    valid: errors.length === 0,
+    errors: errors
+  };
+}
+
+function showDataWarning(errors) {
+  try {
+    var old = document.getElementById("data-warning");
+    if (old) old.remove();
+
+    var box = document.createElement("div");
+    box.id = "data-warning";
+
+    box.style.position = "fixed";
+    box.style.right = "14px";
+    box.style.bottom = "14px";
+    box.style.zIndex = "99999";
+    box.style.maxWidth = "320px";
+    box.style.padding = "9px 12px";
+    box.style.borderRadius = "10px";
+    box.style.background = "#fff7ed";
+    box.style.border = "1px solid #fdba74";
+    box.style.color = "#7c2d12";
+    box.style.font = "12px/1.4 system-ui, -apple-system, sans-serif";
+    box.style.boxShadow = "0 4px 18px rgba(0,0,0,.12)";
+    box.style.cursor = "pointer";
+
+    box.innerHTML =
+      "<strong>Data issue detected</strong><br>" +
+      "Showing the safe fallback family tree.<br>" +
+      "<span style='opacity:.75'>Click to view details</span>";
+
+    box.title = errors.join("\n");
+
+    box.addEventListener("click", function() {
+      alert(
+        "Google Sheet validation issues:\n\n" +
+        errors.join("\n")
+      );
+    });
+
+    document.body.appendChild(box);
+  } catch (e) {
+    console.warn("Could not display validation warning.", e);
+  }
+}
+
 var PEOPLE;
 var USING_LIVE_SHEET = false;
 
@@ -2613,19 +2729,37 @@ try {
   if (!response.ok) throw new Error("HTTP " + response.status);
 
   var csv = await response.text();
-  PEOPLE = makePeopleFromCSV(csv);
+  var LIVE_PEOPLE = makePeopleFromCSV(csv);
+
+  var validation = validatePeople(LIVE_PEOPLE);
+
+  if (!validation.valid) {
+    throw {
+      validationErrors: validation.errors,
+      message: "Google Sheet validation failed"
+    };
+  }
+
+  PEOPLE = LIVE_PEOPLE;
   USING_LIVE_SHEET = true;
 
   console.info(
     "Family tree: loaded " + PEOPLE.length +
-    " people from the live Google Sheet."
+    " validated people from the live Google Sheet."
   );
 } catch (err) {
   console.warn(
-    "Could not load live Google Sheet. Using embedded fallback data.",
+    "Could not use live Google Sheet. Using embedded fallback data.",
     err
   );
+
   PEOPLE = FAMILY_DATA;
+
+  if (err && err.validationErrors) {
+    setTimeout(function() {
+      showDataWarning(err.validationErrors);
+    }, 0);
+  }
 }
 
 /* ---------------------------------------------------------------- 1 DATA */
